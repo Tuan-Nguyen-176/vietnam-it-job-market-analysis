@@ -1,0 +1,2 @@
+﻿params,depth,leaves
+"{""model__ccp_alpha"": 0.001, ""model__max_depth"": 6, ""model__min_samples_leaf"": 10}",6,24
