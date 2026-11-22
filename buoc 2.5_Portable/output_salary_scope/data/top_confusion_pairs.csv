@@ -1,0 +1,7 @@
+﻿true_class,pred_class,count
+15_den_30,duoi_15,18
+15_den_30,tren_30,16
+duoi_15,15_den_30,7
+tren_30,15_den_30,7
+duoi_15,tren_30,4
+tren_30,duoi_15,3

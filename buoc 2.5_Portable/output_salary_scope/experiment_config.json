@@ -1,0 +1,56 @@
+{
+  "data_path": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable\\buoc2.1_2.2\\data\\processed\\clean_data_processed.csv",
+  "data_path_relative_to_project": "buoc2.1_2.2/data/processed/clean_data_processed.csv",
+  "project_root": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable",
+  "notebook_dir": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable",
+  "result_dir": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable\\output_salary_scope",
+  "data_sha256": "8b931fe7c90b7ee89b0bdf342d7d1a8bfb5b40a95aa0e617d6ddd5f820d2790f",
+  "python": "3.14.0",
+  "pandas": "3.1.1",
+  "numpy": "2.5.5",
+  "sklearn": "1.9.1",
+  "seed": 42,
+  "features": [
+    "skills",
+    "exp_min_years",
+    "exp_max_years"
+  ],
+  "target": "salary_class",
+  "salary_unit": "VND/month; verify upstream normalization",
+  "target_meaning": "class of midpoint of advertised salary range; not take-home pay",
+  "scope_filter": "included_provisional",
+  "salary_eligible_before_scope": 761,
+  "excluded_by_scope": 73,
+  "scope_counts": {
+    "included_provisional": 2869,
+    "pending_review": 266
+  },
+  "review_fingerprint": "f4a7c7f867fbb6ff0d1b4b8ad39f20e934f0b019248d00720eadc8bc67260244",
+  "boundaries": "<15000000; 15000000<=x<=30000000; >30000000",
+  "samples": 688,
+  "train": 550,
+  "test": 138,
+  "grouping": "connected components of job_group_id or normalized description",
+  "outer_split": "first fold of StratifiedGroupKFold(5,shuffle=True,random_state=42)",
+  "inner_split": "shared materialized StratifiedGroupKFold(3,shuffle=True,random_state=42)",
+  "winner_selected_by": "train CV macro F1",
+  "winner": "RandomForest",
+  "best_params": {
+    "Dummy": {},
+    "DecisionTree": {
+      "model__ccp_alpha": 0.01,
+      "model__max_depth": 3,
+      "model__min_samples_leaf": 3
+    },
+    "RandomForest": {
+      "model__max_depth": null,
+      "model__min_samples_leaf": 2,
+      "model__n_estimators": 200
+    }
+  },
+  "pruned_tree_params": {
+    "model__ccp_alpha": 0.01,
+    "model__max_depth": 3,
+    "model__min_samples_leaf": 3
+  }
+}

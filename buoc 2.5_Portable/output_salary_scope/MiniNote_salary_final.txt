@@ -1,0 +1,66 @@
+BƯỚC 2.5 — PHÂN LỚP TRUNG ĐIỂM KHOẢNG LƯƠNG CHÀO TUYỂN IT
+
+Nguồn: C:\Users\QuanTheAnh\Documents\Codex\2026-11-22\https-github-com-tuan-nguyen-176\outputs\buoc 2.5_Portable\buoc2.1_2.2\data\processed\clean_data_processed.csv
+Dữ liệu gốc: 3135; đủ điều kiện: 688; train: 550; test: 138.
+Nhãn: <15 triệu; 15–30 triệu gồm hai đầu; >30 triệu. Đơn vị mục tiêu VND/tháng, cần đối chiếu quy tắc chuẩn hóa đầu nguồn.
+Phân bố: {'15_den_30': 323, 'tren_30': 208, 'duoi_15': 157}
+Trước lọc phạm vi: 761 tin đủ điều kiện lương; tạm loại 73 tin chưa được chấp nhận trong phạm vi IT.
+Chỉ giữ scope_status=included_provisional. Đây là phạm vi sơ bộ, không khẳng định tất cả tin pending_review đều ngoài IT.
+Luong_TB là trung điểm khoảng lương chào tuyển đã xử lý, không phải lương thực nhận.
+X chỉ gồm skills, exp_min_years, exp_max_years. Lương, tiêu đề và mô tả không vào X.
+Kỹ năng multi-hot; median và chỉ báo thiếu học trong pipeline từng fold.
+Nhóm là thành phần liên thông của job_group_id hoặc mô tả chuẩn hóa giống nhau; không có nhóm giao nhau train/test hoặc train/validation.
+Chưa phát hiện hết tin gần trùng. Ba mô hình dùng chung 3 fold CV trên train.
+Chọn mô hình bằng CV Macro F1: RandomForest. Không chọn lại bằng test.
+
+       model  accuracy  macro_precision  macro_recall  macro_f1  weighted_f1  train_macro_f1     gap  cv_macro_f1  cv_train_macro_f1  cv_std
+       Dummy    0.4710           0.1570        0.3333    0.2135       0.3016          0.2129 -0.0006       0.2129             0.2129  0.0004
+DecisionTree    0.5725           0.5713        0.6019    0.5758       0.5701          0.6438  0.0680       0.6267             0.6526  0.0230
+RandomForest    0.6014           0.5974        0.6280    0.6000       0.5975          0.8171  0.2171       0.6268             0.8256  0.0178
+
+Cây cắt tỉa: {'model__ccp_alpha': 0.01, 'model__max_depth': 3, 'model__min_samples_leaf': 3}; độ sâu 3, số lá 6.
+CV tìm cả alpha=0 và alpha>0. Nếu cấu hình DT tốt nhất có alpha=0, cây cắt tỉa bổ sung không được gọi là DT tốt nhất.
+Train là điểm fit lại trên toàn train; gap lớn cảnh báo overfitting. So sánh thêm CV train/validation và độ lệch chuẩn, không chỉ test.
+
+PHÂN TÍCH TIN SAI CỤ THỂ
+
+vietnamworks-7fe0717a04 — CG Phát Triển Giải Pháp CNTT - ID9280
+Thật: duoi_15; dự đoán: tren_30; lương: 12,500,000 VND/tháng.
+Skills: [".net", "agile", "aws", "c#", "ci/cd", "devops", "docker", "gitlab", "java", "jira", "kafka", "microservices", "rest api", "scrum", "spring boot"]; kinh nghiệm min/max: 10.0/nan.
+Quan sát: trung điểm lương trong CSV là 12,5 triệu, nhưng JD yêu cầu tối thiểu 10 năm CNTT, ít nhất 3 năm technical lead/kiến trúc và nhiều kỹ năng backend/cloud. Dự đoán nhóm cao có thể liên quan đến các đặc trưng này. Cần kiểm tra lại khoảng lương và nguồn quy đổi vì chúng có vẻ chưa phù hợp với mô tả vai trò; chưa đủ bằng chứng để kết luận nhãn sai và không tự sửa nhãn theo mô hình.
+
+topcv-0114f2dcbe — FRESHER Transmission Engineer Bitel (Viettel PERU)
+Thật: tren_30; dự đoán: duoi_15; lương: 35,000,000 VND/tháng.
+Skills: ["autocad", "cisco", "excel", "firewall", "visio"]; kinh nghiệm min/max: 0.0/nan.
+Quan sát: tin ghi Fresher, không cần kinh nghiệm, exp_min=0; JD nêu làm tại Peru và tổng thu nhập khoảng 1.200–1.500 USD/tháng. Giả thuyết: mô hình chỉ có skills/experience nên chưa thể hiện bối cảnh làm việc nước ngoài và thành phần thu nhập. Cần rà phạm vi thị trường Việt Nam và quy đổi lương ở bước đầu nguồn. Chưa tự loại tin chỉ vì dự đoán sai; mọi quy tắc địa lý mới phải áp dụng chung rồi đánh giá lại.
+
+topcv-033a519fc3 — Kỹ Sư An Toàn Thông Tin
+Thật: tren_30; dự đoán: duoi_15; lương: 32,500,000 VND/tháng.
+Skills: ["cisco", "cybersecurity", "linux", "windows server"]; kinh nghiệm min/max: 1.0/1.0.
+Quan sát: trung điểm lương 32,5 triệu, kinh nghiệm trong dữ liệu là 1/1 năm; skills hiện có Cisco, Cybersecurity, Linux, Windows Server. JD có thêm CCNA, CompTIA Security+, pentest, vulnerability assessment, mã hóa và quản lý truy cập. Giả thuyết: bộ trích kỹ năng chưa phản ánh đầy đủ yêu cầu an toàn thông tin. Cần rà extractor trên dữ liệu phát triển; không khẳng định đây là nguyên nhân duy nhất.
+
+vietnamworks-03cddaef4c — Research & Teaching Assistants, Computer Science Study Program (2 Openings)
+Thật: tren_30; dự đoán: duoi_15; lương: 40,500,000 VND/tháng.
+Skills: ["agile", "c#", "c++", "computer vision", "deep learning", "machine learning", "python", "pytorch"]; kinh nghiệm min/max: nan/nan.
+Quan sát: trung điểm lương 40,5 triệu, thiếu cả hai trường kinh nghiệm; JD yêu cầu bằng thạc sĩ, tiếng Anh IELTS, nghiên cứu/giảng dạy về deep learning và computer vision. X chỉ chứa kỹ năng công nghệ và kinh nghiệm nên chưa phản ánh hết trình độ học thuật và nhiệm vụ nghiên cứu. Đây là giới hạn biểu diễn đầu vào; nếu mở rộng đặc trưng cần phù hợp yêu cầu đề và một đánh giá độc lập.
+
+topdev-13fa7c7f57 — NHÂN VIÊN TRIỂN KHAI BẢO TRÌ PHẦN MỀM
+Thật: duoi_15; dự đoán: tren_30; lương: 6,500,000 VND/tháng.
+Skills: []; kinh nghiệm min/max: nan/nan.
+Quan sát: skills rỗng và cả hai trường kinh nghiệm đều thiếu; JD ghi lương 6–7 triệu cộng thưởng, phù hợp trung điểm 6,5 triệu trong CSV. Tin mô tả triển khai phần mềm, hỗ trợ người dùng, nghiệp vụ và giao tiếp. Giả thuyết: đầu vào quá ít thông tin sau trích xuất và điền median nên mô hình phân biệt kém. Cần rà kỹ năng hỗ trợ/triển khai và bổ sung cờ thiếu kỹ năng nếu được đánh giá bằng CV; không đọc mức lương trong JD để làm X.
+
+HẠN CHẾ VÀ HƯỚNG PHÁT TRIỂN
+Kết quả chỉ phản ánh tin công khai lương đủ điều kiện, chưa đại diện toàn bộ thị trường. Lương/thu nhập, quy đổi ngoại tệ/kỳ lương và nhãn gần ngưỡng cần được kiểm tra từ dữ liệu gốc.
+Các nguyên nhân lỗi là giả thuyết dựa trên JD. Không sửa extractor hoặc tham số dựa test hiện tại rồi coi điểm test đó là đánh giá độc lập mới; dùng tập kiểm tra mới hoặc nested CV khi đánh giá phiên bản sau.
+Cần cải thiện độ đầy đủ của skills/experience bằng quy tắc chung; không đưa cột lương hay văn bản chứa lương vào X để tăng điểm.
+Bước này kế thừa dữ liệu processed của 2.1–2.2. Chưa kiểm tra kết quả Clustering/Apriori trong lần này nên không tự tạo liên hệ định lượng với 2.3–2.4.
+
+TÁI LẬP
+Restart & Run All từ kernel sạch. Xem experiment_config.json để đối chiếu seed, phiên bản thư viện, hash CSV và cấu hình; split_manifest.csv để kiểm tra chia tập.
+Bảng/hình đều được tính từ cùng lần chạy. Điểm có thể thay đổi khi đổi dữ liệu hoặc phiên bản thư viện.
+KẾT QUẢ SAU LỌC PHẠM VI IT
+Giữ 688 tin; train 550, test 138.
+Chọn RandomForest bằng CV. Accuracy test=0.6014; Macro F1 test=0.6000; gap=0.2171.
+Chênh lệch CV Macro F1 giữa hai mô hình dẫn đầu=0.000016. Chênh lệch nhỏ chưa cho thấy mô hình dẫn đầu vượt trội ổn định; cần đọc cùng CV Std.
+Khoảng cách train/test vẫn cần được lưu ý. Không so điểm với tập 761 tin để kết luận cải thiện, vì dữ liệu và phép chia đã thay đổi.
+Một ví dụ lỗi là việc tại Peru; scope_status kiểm soát phạm vi ngành sơ bộ, chưa tự đảm bảo phạm vi địa lý. Cần làm rõ phạm vi thị trường với nhóm trước thí nghiệm tiếp theo, không thay quy tắc theo từng lỗi test.
