@@ -4,7 +4,7 @@
 
 Nhóm sử dụng kỹ năng và số năm kinh nghiệm để dự đoán **nhóm của trung điểm khoảng lương chào tuyển**, so sánh DummyClassifier, Decision Tree có cắt tỉa và Random Forest. `Luong_TB` là giá trị đã xử lý từ khoảng lương đăng tuyển, không phải lương thực nhận của ứng viên.
 
-Notebook dùng cho phiên bản này là `Classification_HoanChinh_Scope_Backup.ipynb`. Nhóm giữ pipeline và cách so sánh mô hình của bản trước, bổ sung lọc `scope_status`, sửa scorer và cập nhật toàn bộ số liệu sau lọc.
+Notebook dùng cho phiên bản này là `buoc 2.5_Portable/Classification_HoanChinh.ipynb` (trên máy chạy gốc file mang tên `Classification_HoanChinh_Scope_Backup.ipynb`). Nhóm giữ pipeline và cách so sánh mô hình của bản trước, bổ sung lọc `scope_status`, sửa scorer và cập nhật toàn bộ số liệu sau lọc.
 
 Sau khi lọc phạm vi ngành sơ bộ và điều kiện lương, tập mô hình còn **688 tin**, gồm **550 tin train và 138 tin test**. Random Forest được chọn bằng CV Macro F1 và đạt **Accuracy 60,14%, Macro F1 0,6000** trên test. Tuy nhiên, điểm CV của RF và Decision Tree gần bằng nhau; RF còn gap Train/Test **0,2171**, nên chưa thể kết luận mô hình vượt trội ổn định hoặc đã hết overfitting.
 
@@ -97,6 +97,21 @@ Cấu hình tốt nhất là **`max_depth=3`, `min_samples_leaf=3`, `ccp_alpha=0
 Khảo sát 6 cấu hình × 3 fold: `n_estimators=[200]`, `max_depth=[6,None]`, `min_samples_leaf=[2,5,10]`; cố định `class_weight="balanced_subsample"` và seed 42.
 
 Cấu hình tốt nhất là **200 cây, `max_depth=None`, `min_samples_leaf=2`**. CV Macro F1 đạt **0,626751**, cao hơn DT khoảng **0,000016** nên RF được chọn theo quy tắc điểm CV cao nhất đã có trong code. Chênh lệch này rất nhỏ so với biến động giữa các fold, chưa cho thấy lợi thế ổn định; không chọn lại mô hình theo test.
+
+### 2.5.10b. Khảo sát overfitting và cắt tỉa `ccp_alpha` (bổ sung 2026-11-22)
+
+Lưới ở 2.5.9 chỉ thử ba alpha và đã giới hạn độ sâu, nên chưa tách được tác dụng của riêng việc cắt tỉa. Mục 5b của notebook học một cây **không giới hạn độ sâu**, lấy dãy alpha thật bằng `cost_complexity_pruning_path` (94 giá trị), rồi tính Macro F1 train/validation trên đúng 3 fold dùng chung. Alpha được chọn theo validation (hòa thì lấy alpha lớn hơn); test chỉ dùng để báo cáo.
+
+| Cây | Độ sâu | Số lá | F1 train | F1 CV | F1 test | Gap train–test |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|
+| Đầy đủ (alpha = 0) | 33 | 248 | 0,958 | 0,594 | 0,537 | 0,421 |
+| Cắt tỉa (alpha ≈ 0,0081) | 3 | 6 | 0,644 | 0,629 | 0,576 | 0,068 |
+
+Cây đầy đủ overfit rõ (gần thuộc lòng train). Cắt tỉa giảm gap từ 0,42 xuống 0,07 và tăng F1 test từ 0,537 lên 0,576. Alpha lớn nhất (≈ 0,045) gây underfitting (F1 train và validation cùng ≈ 0,47). Hình: `figures/pruning_curve.png`; bảng: `pruning_path_cv.csv`, `overfitting_full_vs_pruned.csv`.
+
+**Độ quan trọng đặc trưng của cây cắt tỉa** (`pruned_tree_importance.csv`): chỉ có `exp_min_years` (≈ 0,74) và cờ thiếu `exp_max_years` (≈ 0,26); cây không chia theo kỹ năng nào. Kỹ năng chỉ được Random Forest khai thác. Mục này còn xuất `per_class_metrics.csv` (precision/recall/F1 từng lớp của cả ba mô hình).
+
+Mục 5b không đổi mô hình đã chọn, danh sách tin sai hay `review_fingerprint` (đã kiểm: vẫn `f4a7c7f8…`).
 
 ### 2.5.11. Đánh giá và phân tích tin sai
 
@@ -234,7 +249,7 @@ Năm tiêu chí ban đầu vẫn được thể hiện: đúng đầu vào kỹ 
 
 ### 8.1. Thành phần bàn giao
 
-- `Classification_HoanChinh_Scope_Backup.ipynb`: notebook đã lưu output của cả bảy cell code.
+- `Classification_HoanChinh.ipynb`: notebook gồm tám cell code (thêm mục 5b ngày 2026-11-22); cần Restart & Run All để lưu output của mục mới.
 - `MiniNote_2.5.md`: báo cáo theo tập 688 tin.
 - `requirements.txt`: phiên bản thư viện của lần chạy đối chiếu.
 - `output_salary_scope/`: bảng, hình, MiniNote tự xuất và cấu hình.
