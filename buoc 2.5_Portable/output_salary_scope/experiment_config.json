@@ -1,9 +1,6 @@
 {
-  "data_path": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable\\buoc2.1_2.2\\data\\processed\\clean_data_processed.csv",
   "data_path_relative_to_project": "buoc2.1_2.2/data/processed/clean_data_processed.csv",
-  "project_root": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable",
-  "notebook_dir": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable",
-  "result_dir": "C:\\Users\\QuanTheAnh\\Documents\\Codex\\2026-11-22\\https-github-com-tuan-nguyen-176\\outputs\\buoc 2.5_Portable\\output_salary_scope",
+  "notebook_dir_relative_to_project": "buoc 2.5_Portable",
   "data_sha256": "8b931fe7c90b7ee89b0bdf342d7d1a8bfb5b40a95aa0e617d6ddd5f820d2790f",
   "python": "3.14.0",
   "pandas": "3.1.1",
@@ -52,5 +49,17 @@
     "model__ccp_alpha": 0.01,
     "model__max_depth": 3,
     "model__min_samples_leaf": 3
+  },
+  "pruning_survey": {
+    "n_alphas": 94,
+    "best_alpha": 0.008133890754041029,
+    "full_tree": {
+      "depth": 33,
+      "leaves": 248
+    },
+    "pruned_tree": {
+      "depth": 3,
+      "leaves": 6
+    }
   }
 }

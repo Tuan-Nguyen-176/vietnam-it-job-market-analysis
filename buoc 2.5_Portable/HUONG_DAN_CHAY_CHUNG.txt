@@ -1,0 +1,16 @@
+BƯỚC 2.5 — BẢN CHÍNH CỦA NHÓM
+
+Notebook: buoc 2.5_Portable/Classification_HoanChinh.ipynb
+CSV: buoc2.1_2.2/data/processed/clean_data_processed.csv từ GỐC REPO.
+Kết quả: buoc 2.5_Portable/output_salary_scope.
+
+Mỗi thành viên lưu repo ở đâu cũng được. Không thay code bằng ổ D của người khác.
+1. Mở gốc repo trong VS Code.
+2. Cài: python -m pip install -r "buoc 2.5_Portable/requirements.txt" ipykernel
+3. Chọn kernel, mở notebook chính và Restart Kernel & Run All.
+4. Kiểm tra các đường dẫn được in ở cell đầu.
+5. Giữ tên file khớp NOTEBOOK_NAME; không chạy bản cũ.
+
+Đối chiếu: 688 mẫu; train/test 550/138. Nếu số/điểm đổi, kiểm tra hash CSV và môi trường, không ép kết quả.
+RF còn overfitting; CV gần bằng DT, không nói RF vượt trội.
+CSV lồng trong Portable (nếu còn) không được chương trình sử dụng. Không cần nhân thêm bản dữ liệu hoặc thư mục output.

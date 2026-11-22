@@ -1,6 +1,6 @@
 BƯỚC 2.5 — PHÂN LỚP TRUNG ĐIỂM KHOẢNG LƯƠNG CHÀO TUYỂN IT
 
-Nguồn: C:\Users\QuanTheAnh\Documents\Codex\2026-11-22\https-github-com-tuan-nguyen-176\outputs\buoc 2.5_Portable\buoc2.1_2.2\data\processed\clean_data_processed.csv
+Nguồn: buoc2.1_2.2/data/processed/clean_data_processed.csv (đường dẫn tương đối từ gốc repo)
 Dữ liệu gốc: 3135; đủ điều kiện: 688; train: 550; test: 138.
 Nhãn: <15 triệu; 15–30 triệu gồm hai đầu; >30 triệu. Đơn vị mục tiêu VND/tháng, cần đối chiếu quy tắc chuẩn hóa đầu nguồn.
 Phân bố: {'15_den_30': 323, 'tren_30': 208, 'duoi_15': 157}
@@ -21,6 +21,12 @@ RandomForest    0.6014           0.5974        0.6280    0.6000       0.5975    
 Cây cắt tỉa: {'model__ccp_alpha': 0.01, 'model__max_depth': 3, 'model__min_samples_leaf': 3}; độ sâu 3, số lá 6.
 CV tìm cả alpha=0 và alpha>0. Nếu cấu hình DT tốt nhất có alpha=0, cây cắt tỉa bổ sung không được gọi là DT tốt nhất.
 Train là điểm fit lại trên toàn train; gap lớn cảnh báo overfitting. So sánh thêm CV train/validation và độ lệch chuẩn, không chỉ test.
+
+KHẢO SÁT OVERFITTING VÀ CẮT TỈA (mục 5b)
+Dãy alpha lấy từ cost_complexity_pruning_path của cây không giới hạn độ sâu: 94 giá trị; chọn alpha bằng CV Macro F1 = 0.00813.
+                             cay  ccp_alpha  do_sau  so_la  train_macro_f1  cv_val_macro_f1  test_macro_f1  gap_train_test
+          Cây đầy đủ (alpha = 0)     0.0000      33    248          0.9579           0.5936         0.5368          0.4212
+Cây cắt tỉa (alpha chọn bằng CV)     0.0081       3      6          0.6438           0.6289         0.5758          0.0680
 
 PHÂN TÍCH TIN SAI CỤ THỂ
 
