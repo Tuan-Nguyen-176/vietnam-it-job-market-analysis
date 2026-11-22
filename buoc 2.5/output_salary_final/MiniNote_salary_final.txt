@@ -1,0 +1,52 @@
+BƯỚC 2.5 — DỰ ĐOÁN KHOẢNG LƯƠNG
+
+Nguồn: D:\Projects\vietnam-it-job-market-analysis-git\buoc2.1_2.2\data\processed\clean_data_processed.csv
+Dữ liệu gốc: 3135; đủ điều kiện: 761; train: 608; test: 153.
+Nhãn: <15 triệu; 15–30 triệu gồm hai đầu; >30 triệu. Đơn vị mục tiêu VND/tháng, cần đối chiếu quy tắc chuẩn hóa đầu nguồn.
+Phân bố: {'15_den_30': 362, 'tren_30': 231, 'duoi_15': 168}
+X chỉ gồm skills, exp_min_years, exp_max_years. Lương, tiêu đề và mô tả không vào X.
+Kỹ năng multi-hot; median và chỉ báo thiếu học trong pipeline từng fold.
+Nhóm là thành phần liên thông của job_group_id hoặc mô tả chuẩn hóa giống nhau; không có nhóm giao nhau train/test hoặc train/validation.
+Chưa phát hiện hết tin gần trùng. Ba mô hình dùng chung 3 fold CV trên train.
+Chọn mô hình bằng CV Macro F1: RandomForest. Không chọn lại bằng test.
+
+       model  accuracy  macro_precision  macro_recall  macro_f1  weighted_f1  train_macro_f1    gap  cv_macro_f1  cv_train_macro_f1  cv_std
+       Dummy    0.4706           0.1569        0.3333    0.2133       0.3012          0.2153 0.0020       0.2153             0.2153  0.0009
+DecisionTree    0.6275           0.6240        0.6610    0.6304       0.6235          0.6595 0.0291       0.6106             0.6567  0.0432
+RandomForest    0.6667           0.6594        0.6801    0.6664       0.6670          0.8052 0.1388       0.6396             0.8088  0.0240
+
+Cây cắt tỉa: {'model__ccp_alpha': 0.001, 'model__max_depth': 6, 'model__min_samples_leaf': 10}; độ sâu 6, số lá 24.
+CV tìm cả alpha=0 và alpha>0. Nếu cấu hình DT tốt nhất có alpha=0, cây cắt tỉa bổ sung không được gọi là DT tốt nhất.
+Train là điểm fit lại trên toàn train; gap lớn cảnh báo overfitting. So sánh thêm CV train/validation và độ lệch chuẩn, không chỉ test.
+
+PHÂN TÍCH TIN SAI CỤ THỂ
+
+topcv-12d1a0998c — Nhân Viên Phát Triển Phần Mềm &Kỹ Thuật Viễn Thông
+Thật: tren_30; dự đoán: duoi_15; lương: 40,000,000 VND/tháng.
+Skills: []; kinh nghiệm min/max: 1.0/1.0.
+Skills rỗng, kinh nghiệm 1/1 năm; JD có điện tử, viễn thông, quang học và yêu cầu ngoại ngữ. Giả thuyết: bộ trích kỹ năng bỏ sót miền chuyên môn nên X chưa đủ thông tin. Cần rà từ điển kỹ năng, không sửa nhãn theo dự đoán.
+
+itviec-9c2149df10 — Intern C/C++ Embedded & Systems Engineer (Qt)
+Thật: duoi_15; dự đoán: tren_30; lương: 7,637,500 VND/tháng.
+Skills: ["bash", "c", "c++", "linux", "python"]; kinh nghiệm min/max: nan/nan.
+Thiếu cả min/max kinh nghiệm; kỹ năng C/C++, Linux, Python, Bash. Tiêu đề và JD nói thực tập/sinh viên hoặc mới tốt nghiệp. Giả thuyết: X thiếu tín hiệu kinh nghiệm và kỹ năng chồng lấn với việc trình độ cao. Không tự gán 0 năm chỉ vì giá trị thiếu.
+
+vietnamworks-b53c93b245 — Kỹ Sư Triển Khai - Làm Việc Tại Hồ Chí Minh/ Phú Quốc
+Thật: tren_30; dự đoán: duoi_15; lương: 33,333,333 VND/tháng.
+Skills: ["autocad", "cisco", "cybersecurity"]; kinh nghiệm min/max: nan/nan.
+Thiếu min/max kinh nghiệm; JD có ICT/ELV, CCNA/CCNP, trong khi skills hiện có AutoCAD/Cisco/Cybersecurity. JD ghi thu nhập 350–450 triệu/năm, trung bình /12 khớp 33.333333 triệu/tháng. Cần phân biệt thu nhập với lương cơ bản; đây chưa phải bằng chứng nguyên nhân duy nhất của lỗi.
+
+vietnamworks-a542956454 — Software Product Owner
+Thật: tren_30; dự đoán: duoi_15; lương: 31,250,000 VND/tháng.
+Skills: ["agile", "jira", "scrum"]; kinh nghiệm min/max: 1.0/nan.
+Kinh nghiệm tối thiểu 1 năm, tối đa thiếu; skills Agile/Jira/Scrum. JD Product Owner yêu cầu tiếng Anh, phối hợp stakeholder và quản lý backlog. Giả thuyết: kỹ năng nghiệp vụ và mức trách nhiệm chưa được X phản ánh đủ. Cần rà bộ trích kỹ năng nghiệp vụ ở thử nghiệm tiếp theo.
+
+HẠN CHẾ VÀ HƯỚNG PHÁT TRIỂN
+Kết quả chỉ phản ánh tin công khai lương đủ điều kiện, chưa đại diện toàn bộ thị trường. Lương/thu nhập, quy đổi ngoại tệ/kỳ lương và nhãn gần ngưỡng cần được kiểm tra từ dữ liệu gốc.
+Các nguyên nhân lỗi là giả thuyết dựa trên JD. Không sửa extractor hoặc tham số dựa test hiện tại rồi coi điểm test đó là đánh giá độc lập mới; dùng tập kiểm tra mới hoặc nested CV khi đánh giá phiên bản sau.
+Cần cải thiện độ đầy đủ của skills/experience bằng quy tắc chung; không đưa cột lương hay văn bản chứa lương vào X để tăng điểm.
+Bước này kế thừa dữ liệu processed của 2.1–2.2. Chưa kiểm tra kết quả Clustering/Apriori trong lần này nên không tự tạo liên hệ định lượng với 2.3–2.4.
+
+TÁI LẬP
+Restart & Run All từ kernel sạch. Xem experiment_config.json để đối chiếu seed, phiên bản thư viện, hash CSV và cấu hình; split_manifest.csv để kiểm tra chia tập.
+Bảng/hình đều được tính từ cùng lần chạy. Điểm có thể thay đổi khi đổi dữ liệu hoặc phiên bản thư viện.
