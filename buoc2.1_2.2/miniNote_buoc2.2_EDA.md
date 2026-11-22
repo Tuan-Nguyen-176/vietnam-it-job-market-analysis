@@ -25,7 +25,7 @@ So sánh số tin và mặt bằng lương được ghi nhận giữa ba khu v�
 
 ### 2.2.5 — Mở rộng: kỹ năng theo cấp bậc trong cùng nhóm nghề
 
-Gom các nhãn vị trí thành nhóm nghề và so sánh tỷ lệ đề cập kỹ năng giữa các cấp bậc bằng heatmap. Qua đó nhận diện kỹ năng phổ biến và khác biệt giữa nhóm người mới vào nghề với nhóm nhiều kinh nghiệm.
+So sánh IT tổng quát, Phần mềm/Web, Dữ liệu/AI và Cloud/DevOps: bốn nhóm đã xác định nghề có nhiều tin nhất trong mẫu. Mỗi nhóm trình bày 12 kỹ năng phổ biến nhất của chính nhóm đó, dùng chung các cột cho các cấp bậc.
 
 ### 2.2.6 — Mở rộng: ngoại ngữ và quyền lợi theo nhóm nghề
 
