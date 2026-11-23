@@ -4,7 +4,7 @@
 
 Nhóm sử dụng kỹ năng và số năm kinh nghiệm để dự đoán **nhóm của trung điểm khoảng lương chào tuyển**, so sánh DummyClassifier, Decision Tree có cắt tỉa và Random Forest. `Luong_TB` là giá trị đã xử lý từ khoảng lương đăng tuyển, không phải lương thực nhận của ứng viên.
 
-Notebook dùng cho phiên bản này là `buoc 2.5_Portable/Classification_HoanChinh.ipynb` (trên máy chạy gốc file mang tên `Classification_HoanChinh_Scope_Backup.ipynb`). Nhóm giữ pipeline và cách so sánh mô hình của bản trước, bổ sung lọc `scope_status`, sửa scorer và cập nhật toàn bộ số liệu sau lọc.
+Notebook dùng cho phiên bản này là `buoc 2.5_Portable/Classification_HoanChinh.ipynb`. Đây là tên file thống nhất để chạy và đối chiếu trong cả ba bản lưu. Nhóm giữ pipeline và cách so sánh mô hình của bản trước, bổ sung lọc `scope_status`, sửa scorer và cập nhật toàn bộ số liệu sau lọc.
 
 Sau khi lọc phạm vi ngành sơ bộ và điều kiện lương, tập mô hình còn **688 tin**, gồm **550 tin train và 138 tin test**. Random Forest được chọn bằng CV Macro F1 và đạt **Accuracy 60,14%, Macro F1 0,6000** trên test. Tuy nhiên, điểm CV của RF và Decision Tree gần bằng nhau; RF còn gap Train/Test **0,2171**, nên chưa thể kết luận mô hình vượt trội ổn định hoặc đã hết overfitting.
 
@@ -48,80 +48,47 @@ Nguồn dữ liệu là `buoc2.1_2.2/data/processed/clean_data_processed.csv`, g
 
 ## 3. Quy trình thực hiện
 
-Các bước 2.5.1–2.5.12 dưới đây là các bước nghiệp vụ, không phải số thứ tự cell. Notebook có tám cell code chính và các phần Markdown giải thích.
+Notebook có **sáu bước chính**, đánh số 1–6. Phần này gom các thao tác theo đúng sáu mục trong notebook; những mục 4–9 phía dưới là phần trình bày và bàn luận kết quả, không phải bước chạy bổ sung.
 
-### 2.5.1. Nạp dữ liệu và kiểm tra schema
+### Bước 1. Kiểm tra dữ liệu, lọc phạm vi và tạo nhãn
 
-Kiểm tra đường dẫn CSV và các cột bắt buộc, trong đó có `scope_status` và `job_uid`. Notebook ưu tiên tìm CSV theo đường dẫn tương đối từ thư mục chạy và thư mục cha; nếu không thấy thì báo lỗi hướng dẫn đặt `PROJECT_ROOT_OVERRIDE`. Không dùng đường dẫn ổ đĩa cá nhân làm fallback.
+Notebook tìm CSV processed theo cấu trúc repo, kiểm tra các cột bắt buộc như `scope_status` và `job_uid`, rồi giữ tin có `scope_status == "included_provisional"` và đủ điều kiện lương. Tập đủ điều kiện lương trước lọc phạm vi là 761; tạm loại 73 tin `pending_review`, còn 688 tin để phân lớp. Việc tạm loại không khẳng định các tin đó đều ngoài IT.
 
-### 2.5.2. Kiểm tra phạm vi ngành và lọc mẫu
+Tạo ba nhãn từ `Luong_TB`: dưới 15 triệu, từ 15 đến 30 triệu (gồm hai ngưỡng), và trên 30 triệu. Phân bố hiện tại là 157/323/208. `Luong_TB` là trung điểm khoảng lương chào tuyển đã xử lý, không phải lương thực nhận.
 
-Chuẩn hóa khoảng trắng ở `scope_status`, giữ `included_provisional` đồng thời đủ điều kiện lương. Xuất `scope_summary.csv` và `filter_summary.csv` để thấy rõ 761 → 688 tin và lý do tạm loại 73 tin.
+Đầu vào X chỉ gồm `skills`, `exp_min_years`, `exp_max_years`; y là `salary_class`. Kỹ năng được đọc từ JSON list và mã hóa multi-hot. Kinh nghiệm âm hoặc vô hạn được xem là thiếu; khoảng tối thiểu lớn hơn tối đa bị kiểm tra. Không đưa lương, `scope_status`, tiêu đề hay mô tả vào X. Median và cờ thiếu được học bên trong pipeline theo từng fold.
 
-### 2.5.3. Tạo nhãn và kiểm tra phân bố
+### Bước 2. Gom nhóm chống rò rỉ và chia tập
 
-Tạo ba nhãn theo ngưỡng cố định, kiểm tra 157/323/208 tin và xuất `class_distribution.csv`. Dùng thêm Macro F1 vì lớp 15–30 triệu chiếm gần một nửa dữ liệu.
+Gom các tin nối với nhau qua cùng `job_group_id` hoặc mô tả chuẩn hóa giống nhau bằng thành phần liên thông; không gom mọi mô tả rỗng vào một nhóm. Cách này chưa phát hiện hết mô tả gần trùng hoặc tin đăng lại đã thay nội dung.
 
-### 2.5.4. Chuẩn hóa kỹ năng và kinh nghiệm
+Dùng fold đầu của `StratifiedGroupKFold(5, shuffle=True, random_state=42)` làm test: 550 train và 138 test. Trên train, tạo ba fold `StratifiedGroupKFold(3, shuffle=True, random_state=42)` dùng chung cho ba mô hình. Assert kiểm tra đủ lớp và không có nhóm giao nhau giữa train/test hoặc train/validation. Các bảng `split_manifest.csv` và `fold_distribution.csv` lưu thông tin để đối chiếu.
 
-Giữ cách xử lý từ bản trước: JSON list cho kỹ năng, chuyển kiểu và kiểm tra khoảng kinh nghiệm. Tạo X sau chuẩn hóa; bộ mã hóa và median chỉ được học khi fit pipeline.
+### Bước 3. Pipeline, baseline và tối ưu mô hình
 
-### 2.5.5. Kiểm soát đầu vào
+Pipeline gồm mã hóa kỹ năng, điền median kinh nghiệm kèm cờ thiếu và bộ phân lớp. GridSearchCV fit toàn bộ pipeline trong từng fold để vocabulary và median không học từ validation/test. Scorer dùng Macro F1 với danh sách nhãn cố định, `pos_label=None` và `zero_division=0`. DummyClassifier là baseline, đạt Accuracy 0,4710 và Macro F1 0,2135.
 
-X chỉ chứa ba trường đã quy định. Không đưa cột có quan hệ trực tiếp với nhãn vào mô hình. Kỹ năng rỗng vẫn được giữ, nhưng được xem là hạn chế về độ đầy đủ dữ liệu.
+Decision Tree khảo sát 18 cấu hình × 3 fold với `max_depth=[3,6,None]`, `min_samples_leaf=[3,10]`, `ccp_alpha=[0,0.001,0.01]`; cấu hình tốt nhất có depth 3, 6 lá, alpha 0,01, CV Macro F1 0,626735.
 
-### 2.5.6. Gom nhóm chống trùng
+Random Forest khảo sát 6 cấu hình × 3 fold với 200 cây, `max_depth=[6,None]`, `min_samples_leaf=[2,5,10]`. Cấu hình tốt nhất có `max_depth=None`, `min_samples_leaf=2`, CV Macro F1 0,626751. Theo quy tắc chọn CV cao nhất đã đặt trước, RF được chọn; chênh lệch với DT chỉ khoảng 0,000016 nên chưa thể hiện ưu thế ổn định. Không chọn mô hình theo điểm test.
 
-Gom các tin cùng `job_group_id` hoặc cùng mô tả chuẩn hóa chữ thường/khoảng trắng; dùng thành phần liên thông để giữ các quan hệ nối tiếp cùng nhóm. Không gom mọi mô tả rỗng với nhau. Cách này chưa phát hiện hết mô tả gần trùng hoặc tin đăng lại đã đổi nội dung.
+### Bước 4. Đánh giá chung và kiểm tra overfitting
 
-### 2.5.7. Chia train/test và tạo fold chung
+Sau khi chọn mô hình bằng CV, dùng test để báo cáo Accuracy, Macro Precision, Macro Recall, Macro F1, Weighted F1, confusion matrix và recall từng lớp. Báo cáo thêm điểm train, khoảng cách train–test và độ lệch chuẩn CV. CV Std mô tả biến động qua ba fold, không phải khoảng tin cậy.
 
-Dùng fold đầu của `StratifiedGroupKFold(5, shuffle=True, random_state=42)` làm test, được **550/138 tin**. Trên train, tạo trước ba fold `StratifiedGroupKFold(3, shuffle=True, random_state=42)` và dùng chung cho ba mô hình.
+RF đạt Test Macro F1 0,6000 nhưng gap train–test 0,2171; DT đạt 0,5758 với gap 0,0680. Vì vậy cần nêu RF còn dấu hiệu overfitting và không khẳng định RF vượt trội rõ ràng chỉ từ chênh lệch CV rất nhỏ.
 
-Các assert kiểm tra đủ ba lớp trong từng tập và không có nhóm giao nhau giữa train/test hoặc train/validation. Xuất `split_manifest.csv` có `scope_status`, nhãn và nhóm; xuất `fold_distribution.csv` để kiểm tra phân bố.
+### Bước 5. Khảo sát cắt tỉa và phân tích tin dự đoán sai
 
-### 2.5.8. Pipeline, baseline và scorer
+Ngoài lưới Decision Tree ở bước 3, notebook khảo sát riêng cây không giới hạn độ sâu bằng `cost_complexity_pruning_path` (94 giá trị alpha), chọn alpha bằng CV trên cùng ba fold; test chỉ dùng để báo cáo. Kết quả hiện tại: cây đầy đủ depth 33/248 lá, F1 train 0,958, CV 0,594, test 0,537; cây cắt tỉa alpha khoảng 0,0081, depth 3/6 lá, F1 train 0,644, CV 0,629, test 0,576. Đây là thí nghiệm khảo sát riêng, không thay mô hình đã chọn ở bước 3.
 
-Pipeline gồm multi-hot kỹ năng, điền median kinh nghiệm kèm chỉ báo thiếu và bộ phân lớp. Toàn bộ pipeline nằm trong GridSearchCV nên vocabulary/median không học từ validation hoặc test.
+Notebook lấy tối đa năm lỗi từ kết quả hiện tại, ưu tiên sai lệch hai bậc, rồi đối chiếu JD để ghi nhận xét. `review_fingerprint` gắn nhận xét với dữ liệu, cấu hình mô hình, phiên bản sklearn, tập test và danh sách ứng viên; nếu dấu nhận dạng thay đổi thì nhận xét cũ không được tự áp dụng. Các nguyên nhân từ JD là giả thuyết, không phải kết luận nhân quả. Không chỉnh mô hình theo test này rồi dùng lại cùng test để tuyên bố đánh giá độc lập.
 
-DummyClassifier chọn lớp phổ biến nhất làm mốc, đạt Accuracy 0,4710 và Macro F1 0,2135. Scorer dùng `make_scorer(f1_score, labels=LABELS, average="macro", pos_label=None, zero_division=0)` để tránh kiểm tra nhãn dương mặc định không phù hợp với nhãn chuỗi đa lớp trên một số phiên bản thư viện. Môi trường đã chạy kiểm tra của bản này là scikit-learn 1.9.1; việc thêm tham số không đồng nghĩa đã thử mọi phiên bản khác.
+### Bước 6. Tổng hợp và xuất kết quả
 
-### 2.5.9. Decision Tree có cắt tỉa
+Notebook lưu bảng, biểu đồ, cấu hình thí nghiệm, manifest chia tập và MiniNote dạng text dưới `output_salary_scope/` cạnh notebook. `experiment_config.json` ghi hash CSV, seed, phiên bản thư viện, điều kiện lọc và tham số; `requirements.txt` ghi các thư viện trực tiếp. File Markdown này là phần giải thích cho người đọc.
 
-Khảo sát 18 cấu hình × 3 fold: `max_depth=[3,6,None]`, `min_samples_leaf=[3,10]`, `ccp_alpha=[0,0.001,0.01]`; cố định seed 42 và `class_weight="balanced"`.
-
-Cấu hình tốt nhất là **`max_depth=3`, `min_samples_leaf=3`, `ccp_alpha=0.01`**; cây sâu **3**, có **6 lá**. CV Macro F1 đạt **0,626735**, test đạt **0,5758**. Alpha dương cho thấy có áp dụng cắt tỉa; độ sâu và số lá là bằng chứng cấu trúc. Không kết luận riêng cắt tỉa là nguyên nhân duy nhất quyết định hiệu quả.
-
-### 2.5.10. Random Forest và chọn mô hình
-
-Khảo sát 6 cấu hình × 3 fold: `n_estimators=[200]`, `max_depth=[6,None]`, `min_samples_leaf=[2,5,10]`; cố định `class_weight="balanced_subsample"` và seed 42.
-
-Cấu hình tốt nhất là **200 cây, `max_depth=None`, `min_samples_leaf=2`**. CV Macro F1 đạt **0,626751**, cao hơn DT khoảng **0,000016** nên RF được chọn theo quy tắc điểm CV cao nhất đã có trong code. Chênh lệch này rất nhỏ so với biến động giữa các fold, chưa cho thấy lợi thế ổn định; không chọn lại mô hình theo test.
-
-### 2.5.10b. Khảo sát overfitting và cắt tỉa `ccp_alpha` (bổ sung 2026-11-22)
-
-Lưới ở 2.5.9 chỉ thử ba alpha và đã giới hạn độ sâu, nên chưa tách được tác dụng của riêng việc cắt tỉa. Mục 5b của notebook học một cây **không giới hạn độ sâu**, lấy dãy alpha thật bằng `cost_complexity_pruning_path` (94 giá trị), rồi tính Macro F1 train/validation trên đúng 3 fold dùng chung. Alpha được chọn theo validation (hòa thì lấy alpha lớn hơn); test chỉ dùng để báo cáo.
-
-| Cây | Độ sâu | Số lá | F1 train | F1 CV | F1 test | Gap train–test |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|
-| Đầy đủ (alpha = 0) | 33 | 248 | 0,958 | 0,594 | 0,537 | 0,421 |
-| Cắt tỉa (alpha ≈ 0,0081) | 3 | 6 | 0,644 | 0,629 | 0,576 | 0,068 |
-
-Cây đầy đủ overfit rõ (gần thuộc lòng train). Cắt tỉa giảm gap từ 0,42 xuống 0,07 và tăng F1 test từ 0,537 lên 0,576. Alpha lớn nhất (≈ 0,045) gây underfitting (F1 train và validation cùng ≈ 0,47). Hình: `figures/pruning_curve.png`; bảng: `pruning_path_cv.csv`, `overfitting_full_vs_pruned.csv`.
-
-**Độ quan trọng đặc trưng của cây cắt tỉa** (`pruned_tree_importance.csv`): chỉ có `exp_min_years` (≈ 0,74) và cờ thiếu `exp_max_years` (≈ 0,26); cây không chia theo kỹ năng nào. Kỹ năng chỉ được Random Forest khai thác. Mục này còn xuất `per_class_metrics.csv` (precision/recall/F1 từng lớp của cả ba mô hình).
-
-Mục 5b không đổi mô hình đã chọn, danh sách tin sai hay `review_fingerprint` (đã kiểm: vẫn `f4a7c7f8…`).
-
-### 2.5.11. Đánh giá và phân tích tin sai
-
-Tính Accuracy, Macro Precision, Macro Recall, Macro F1, Weighted F1, gap và CV Std. Xuất ma trận số lượng, chuẩn hóa theo hàng và recall từng lớp.
-
-Chọn tối đa năm lỗi từ **kết quả hiện tại**, ưu tiên sai lệch hai bậc rồi đến điểm xác suất. Đọc đầy đủ JD trước khi viết nhận xét. `review_fingerprint` gắn nhận xét với dữ liệu, mô hình, phiên bản sklearn, danh sách test và các ứng viên lỗi. Nếu dấu nhận dạng thay đổi, notebook bỏ nhận xét cũ và yêu cầu rà lại, không tự sinh nguyên nhân.
-
-### 2.5.12. Xuất kết quả và môi trường
-
-Lưu bảng, hình, `experiment_config.json`, `split_manifest.csv`, `requirements.txt` và MiniNote dạng text. Cấu hình có hash CSV, điều kiện scope, số tin trước/sau lọc, seed, phiên bản và tham số. Kết quả của phiên bản này dùng thư mục `output_salary_scope`, không trộn với `output_salary_final` của bản 761 tin.
+Khi chạy lại, chọn **Restart Kernel → Run All**. Cùng CSV và môi trường thì đối chiếu 688 mẫu, 550/138 train/test và các bảng. Nếu đổi dữ liệu hoặc phiên bản thư viện, kiểm tra lại hash, số mẫu, điểm số và các nhận xét lỗi trước khi cập nhật tài liệu.
 
 ## 4. Kết quả trên 138 tin test
 
@@ -267,7 +234,7 @@ SHA-256 của CSV: `8b931fe7c90b7ee89b0bdf342d7d1a8bfb5b40a95aa0e617d6ddd5f820d2
 
 ### 8.3. Quy ước đường dẫn và cách chạy chung
 
-Nhóm chốt duy nhất bản `buoc 2.5_Portable/Classification_HoanChinh.ipynb` trong repository `vietnam-it-job-market-analysis`. Trên laptop hiện tại, notebook nằm ở `D:/Projects/vietnam-it-job-market-analysis-git/buoc 2.5_Portable`; đây chỉ là vị trí máy cá nhân, không phải đường dẫn bắt buộc cho các thành viên.
+Nhóm chốt duy nhất bản `buoc 2.5_Portable/Classification_HoanChinh.ipynb` trong repository `vietnam-it-job-market-analysis`. Không cố định đường dẫn ổ đĩa cá nhân trong code; notebook tìm gốc repo dựa trên thư mục Portable và CSV đầu vào. Các đường dẫn tuyệt đối đang hiện trong output lưu kèm notebook có thể là snapshot từ lần chạy trước, không phải đường dẫn hardcode. Sau khi chuyển máy hoặc folder, chạy **Restart Kernel → Run All** để làm mới đường dẫn và kết quả hiển thị.
 
 ```text
 thu_muc_repo/
