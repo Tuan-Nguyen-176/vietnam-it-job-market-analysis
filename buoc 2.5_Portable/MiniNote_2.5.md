@@ -48,7 +48,7 @@ Nguồn dữ liệu là `buoc2.1_2.2/data/processed/clean_data_processed.csv`, g
 
 ## 3. Quy trình thực hiện
 
-Các bước 2.5.1–2.5.12 dưới đây là các bước nghiệp vụ, không phải số thứ tự cell. Notebook có bảy cell code chính và các phần Markdown giải thích.
+Các bước 2.5.1–2.5.12 dưới đây là các bước nghiệp vụ, không phải số thứ tự cell. Notebook có tám cell code chính và các phần Markdown giải thích.
 
 ### 2.5.1. Nạp dữ liệu và kiểm tra schema
 
@@ -230,7 +230,7 @@ Không điều chỉnh nhãn, extractor hoặc tham số theo riêng các lỗi 
 | Chưa lọc phạm vi IT | Thêm scope vào required; giữ included_provisional; xuất bảng lọc 761 → 688 và tạm loại 73 tin |
 | Scorer tương thích | Thêm pos_label=None; giữ nhãn, Macro F1 và zero_division như cũ |
 | Ví dụ lỗi gắn ID cũ | Chọn năm tin sai thực tế mới, đọc JD, lưu nhận xét và kiểm tra fingerprint |
-| Số liệu còn theo 761 tin | Chạy lại bảy cell, cập nhật train/test, CV, bảng, ma trận, hình và cấu hình |
+| Số liệu còn theo 761 tin | Chạy lại tám cell, cập nhật train/test, CV, bảng, ma trận, hình và cấu hình |
 | Tên mục tiêu chưa rõ | Phân nhóm trung điểm khoảng lương chào tuyển, không gọi là lương thực nhận |
 | Môi trường tái lập | Có requirements.txt, cấu hình và manifest chia tập |
 
@@ -249,11 +249,11 @@ Năm tiêu chí ban đầu vẫn được thể hiện: đúng đầu vào kỹ 
 
 ### 8.1. Thành phần bàn giao
 
-- `Classification_HoanChinh.ipynb`: notebook gồm tám cell code (thêm mục 5b ngày 2026-11-22); cần Restart & Run All để lưu output của mục mới.
+- `Classification_HoanChinh.ipynb`: notebook gồm tám cell code, gồm thí nghiệm cắt tỉa bổ sung ở mục 5b; kết quả được kiểm tra lại bằng Run All.
 - `MiniNote_2.5.md`: báo cáo theo tập 688 tin.
 - `requirements.txt`: phiên bản thư viện của lần chạy đối chiếu.
 - `output_salary_scope/`: bảng, hình, MiniNote tự xuất và cấu hình.
-- `buoc2.1_2.2/data/processed/clean_data_processed.csv`: bản sao CSV đầu vào trong thư mục backup để giữ nguyên phiên bản.
+- `../buoc2.1_2.2/data/processed/clean_data_processed.csv`: CSV đầu vào chuẩn nằm ở gốc repo; không sử dụng bản CSV lồng trong Portable.
 
 Các bảng quan trọng: `scope_summary.csv`, `filter_summary.csv`, `class_distribution.csv`, `split_manifest.csv`, `fold_distribution.csv`, `cv_*.csv`, `model_comparison.csv`, `classification_report_*.csv`, `confusion_matrix.csv`, `recall_by_class.csv`, `top_confusion_pairs.csv`, `pruned_tree_structure.csv`, `test_predictions.csv`, `misclassified_jobs.csv`, `review_candidates.csv`, `reviewed_errors.csv`.
 
@@ -265,15 +265,29 @@ Python **3.14.0**, NumPy **2.5.5**, pandas **3.1.1**, matplotlib **3.11.2**, sci
 
 SHA-256 của CSV: `8b931fe7c90b7ee89b0bdf342d7d1a8bfb5b40a95aa0e617d6ddd5f820d2790f`.
 
-### 8.3. Cách chạy lại
+### 8.3. Quy ước đường dẫn và cách chạy chung
 
-1. Mở thư mục backup làm thư mục dự án; chọn môi trường Python phù hợp. Cài thư viện bằng `python -m pip install -r requirements.txt` và cài `ipykernel` nếu môi trường chưa có kernel notebook.
-2. Mở notebook, kiểm tra `DATA_PATH` trỏ đến bản CSV muốn dùng. Gói có sẵn CSV theo cấu trúc tương đối. Nếu chạy từ gốc repo hoặc thư mục notebook, không cần sửa đường dẫn. Với cấu trúc khác, đặt PROJECT_ROOT_OVERRIDE và NOTEBOOK_DIR_OVERRIDE trong cell cấu hình.
-3. Kiểm tra `Path.cwd()`. `RESULT_DIR = NOTEBOOK_DIR / "output_salary_scope"`, nên nơi xuất luôn cạnh notebook, không phụ thuộc kernel đang chạy từ gốc repo hay thư mục notebook. Notebook hỗ trợ vị trí ngay gốc gói, buoc 2.5 hoặc buoc2.5; nếu có nhiều bản thì phải chỉ rõ NOTEBOOK_DIR_OVERRIDE.
-4. Chọn **Restart Kernel → Run All**, không chỉ chạy cell huấn luyện hoặc xuất file.
-5. Với cùng phiên bản, kiểm tra 688 tin, phân bố 157/323/208, train/test 550/138, tổng ma trận 138 và đường chéo 83. Nếu khác, đối chiếu dữ liệu và môi trường thay vì ép số liệu.
-6. Kiểm tra các assert nhóm, bảng chỉ số và năm nhận xét. Khi fingerprint đổi, cần đọc lại review_candidates.csv rồi cập nhật nhận xét; notebook không tự coi nhận xét cũ là hợp lệ.
-7. Khi ghép bài chung, tránh các cell cũ ghi đè X, y, data, groups, cv hoặc RESULT_DIR; chạy lại toàn bộ từ kernel sạch và cập nhật MiniNote nếu kết quả thay đổi.
+Nhóm chốt duy nhất bản `buoc 2.5_Portable/Classification_HoanChinh.ipynb` trong repository `vietnam-it-job-market-analysis`. Trên laptop hiện tại, notebook nằm ở `D:/Projects/vietnam-it-job-market-analysis-git/buoc 2.5_Portable`; đây chỉ là vị trí máy cá nhân, không phải đường dẫn bắt buộc cho các thành viên.
+
+```text
+thu_muc_repo/
+├── buoc2.1_2.2/data/processed/clean_data_processed.csv
+└── buoc 2.5_Portable/
+    ├── Classification_HoanChinh.ipynb
+    ├── MiniNote_2.5.md
+    ├── requirements.txt
+    └── output_salary_scope/
+```
+
+1. Mở gốc repo hoặc thư mục Portable trong VS Code/Jupyter, cài `python -m pip install -r "buoc 2.5_Portable/requirements.txt" ipykernel` khi đứng ở gốc repo. Chọn đúng kernel.
+2. Giữ `PROJECT_ROOT_OVERRIDE=None`. Code tìm gốc có cả thư mục Portable và CSV chuẩn; không chọn bản CSV khác chỉ vì nằm gần kernel hơn.
+3. Giữ tên `Classification_HoanChinh.ipynb` khớp `NOTEBOOK_NAME`. Khi đổi tên file phải cập nhật biến tương ứng. Không chạy các notebook lưu trữ khác.
+4. Cell đầu phải in đúng CSV từ gốc repo và nơi xuất `buoc 2.5_Portable/output_salary_scope`. Chạy từ gốc repo hay Portable đều cho cùng hai đường dẫn này.
+5. Chọn Restart Kernel → Run All. Với cùng CSV và môi trường, đối chiếu 688 tin, 550/138 train/test và các bảng. Nếu khác, kiểm tra hash/thư viện trước khi kết luận code sai hoặc thay số trong báo cáo.
+6. Mọi CSV/PNG/JSON mới chỉ nằm trong output_salary_scope. Notebook không tạo thư mục đầu ra thứ hai theo cwd. Lần chạy lại cập nhật các file cùng tên tại đó.
+7. Khi review_fingerprint đổi, đọc lại review_candidates.csv rồi cập nhật nhận xét; không ép dùng năm ID cũ.
+
+Các nhận xét để vấn đáp: RF còn overfitting; CV của RF và DT gần như bằng nhau; chọn RF là theo quy tắc CV cao nhất, không chứng minh vượt trội. Tên mục tiêu là phân nhóm trung điểm khoảng lương chào tuyển. Phạm vi ngành sơ bộ chưa bảo đảm phạm vi địa lý, như ví dụ làm tại Peru.
 
 ## 9. Kết luận
 
