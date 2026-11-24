@@ -89,7 +89,7 @@ Danh sách trộn ba nhóm: **ngôn ngữ** (Python, Java, SQL), **quy trình** 
 | Lift | Confidence ÷ Support(B) | > 1: kéo nhau lên; = 1: độc lập; < 1: ít đi cùng nhau hơn kỳ vọng |
 | Conviction | (1 − Support(B)) ÷ (1 − Confidence) | Luật "sai" ít hơn đoán ngẫu nhiên bao nhiêu lần; ∞ khi confidence = 100% |
 
-Confidence **bất đối xứng** (`conf(A⇒B) ≠ conf(B⇒A)`), còn Lift **đối xứng**. Điều này quan trọng khi đọc heatmap ở mục 5.2.
+Confidence **bất đối xứng** (`conf(A⇒B) ≠ conf(B⇒A)`), còn Lift **đối xứng**.
 
 ### 3.2. Bảng tham số
 
@@ -176,71 +176,42 @@ Năm luật đạt **100%**: `spring ⇒ java` (117/117), `{rest api, spring boo
 
 ## 5. Phân tích biểu đồ
 
-Hai biểu đồ dưới đây bổ sung cho nhau: biểu đồ 1 nhìn **toàn bộ bộ luật**, biểu đồ 2 nhìn **từng cặp kỹ năng cụ thể**.
+Hình 1 nhìn **toàn bộ bộ luật**, Hình 2 nhìn **từng cặp kỹ năng cụ thể**.
 
 ### 5.1. Biểu đồ 1: Support × Confidence (màu = Lift)
 
 ![Biểu đồ phân tán Support × Confidence của 1.027 luật, màu theo Lift](output/scatter_support_confidence.png)
 
-*Hình 1. Mỗi chấm là một luật trong 1.027 luật đã loại dư thừa. Trục ngang: support (3,0% → 15,7%). Trục dọc: confidence (50% → 100%). Màu: lift (1,4 → 16,0).*
+*Hình 1. Mỗi chấm là một luật trong 1.027 luật đã loại dư thừa; màu thể hiện lift (1,4 → 16,0).*
 
-**Cách đọc.** Luật lý tưởng nằm ở **góc trên bên phải** (phổ biến, chắc chắn), và màu càng sáng (vàng, xanh lá) thì kỹ năng càng gắn kết bất ngờ.
+**Nhận xét**
 
-**Quan sát và ý nghĩa**
+- **Phần lớn luật nằm ở support thấp.** 90,8% luật có support dưới 6% (trung vị 3,7%), còn bên phải mốc 10% gần như trống, chỉ có 23 luật. Nguyên nhân là 84% luật có từ hai kỹ năng ở vế trái, mà tổ hợp càng dài càng hiếm.
+- **Vùng "vừa phổ biến vừa chắc" rất ít luật.** Chỉ 8 luật có support ≥ 10% và confidence ≥ 70%, và cả 8 đều thuộc DevOps/Cloud hoặc Agile: `docker ⇒ ci/cd` (15,7%), `devops ⇒ ci/cd` (14,4%), `kubernetes ⇒ docker` (13,8%), `azure ⇒ aws` (12,7%), `scrum ⇒ agile` (12,5%), `google cloud ⇒ aws` (10,6%) và hai luật ba kỹ năng của Docker/Kubernetes/CI-CD.
+- **Luật càng phổ biến thì lift càng thấp.** Các chấm phía phải có màu tím đến xanh dương (lift 2–4), vì vế phải vốn đã xuất hiện nhiều. Tương quan support–lift là −0,14 (yếu nhưng ngược chiều).
+- **Lift cao nhất tập trung ở góc trên bên trái.** Có 62 luật lift ≥ 8, trong đó 60 luật có support dưới 6%. Cụm chấm xanh lá và vàng ở confidence 95–98% là các luật web front-end như `{html, react} ⇒ css`.
+- **Luật 100% không phải luật gắn kết nhất.** Năm chấm ở confidence = 1,0 (Spring, FastAPI, Scrum) chỉ có màu xanh dương, lift khoảng 4,8, thấp hơn nhiều so với cụm front-end.
+- **Hai cạnh của biểu đồ do ngưỡng lọc tạo ra.** Không có chấm nào dưới 0,5 hay bên trái 0,03 vì đó là `MIN_CONF` và `MIN_SUP`. Ở dải support 3–6% các chấm chồng lên nhau nhiều, nên số luật thực tế dày hơn những gì mắt thấy.
 
-1. **Biểu đồ bị "cắt" bởi hai ngưỡng lọc.** Không có chấm nào ở bên trái x = 0,03 hay phía dưới y = 0,5, đó chính là `MIN_SUP` và `MIN_CONF`. Vì vậy cạnh trái và cạnh dưới của biểu đồ là ranh giới do ta đặt ra, không phải quy luật của dữ liệu.
-2. **Dải dày đặc ở support 3–6%.** Có 90,8% luật (trung vị 3,7%) nằm trong dải này, và gần như toàn bộ phần bên phải x = 0,10 là khoảng trống. Lý do: 84% luật có vế trái từ hai kỹ năng trở lên, mà tổ hợp càng dài thì càng hiếm. Chỉ **23 luật** có support ≥ 10%.
-3. **Vùng "vừa phổ biến vừa chắc" gần như trống.** Chỉ **8 luật** có support ≥ 10% và confidence ≥ 70%, và cả 8 đều thuộc hai nhóm **DevOps/Cloud** hoặc **Agile**:
-
-   | Luật | Support | Confidence | Lift |
-   |---|:-:|:-:|:-:|
-   | devops ⇒ ci/cd | 14,4% | 74,6% | 2,55 |
-   | kubernetes ⇒ docker | 13,8% | 73,6% | 3,33 |
-   | azure ⇒ aws | 12,7% | 70,0% | 3,22 |
-   | scrum ⇒ agile | 12,5% | 89,9% | 4,29 |
-   | google cloud ⇒ aws | 10,6% | 87,1% | 4,00 |
-   | docker ⇒ ci/cd | 15,7% | 70,8% | 2,42 |
-   | {docker, kubernetes} ⇒ ci/cd | 10,0% | 72,8% | 2,49 |
-   | {ci/cd, kubernetes} ⇒ docker | 10,0% | 77,0% | 3,48 |
-
-   Các chấm phía phải có màu **tím đậm đến xanh dương (lift 2–4)**, tức mức gắn kết vừa phải. Nghĩa là luật càng phổ biến thì lift càng bị "kéo xuống", vì vế phải vốn đã xuất hiện nhiều (hệ số tương quan giữa support và lift là −0,14, tức yếu nhưng ngược chiều).
-4. **Các chấm sáng nhất tập trung ở góc trên bên trái.** Có 62 luật lift ≥ 8, trong đó 60 luật (97%) có support dưới 6%. Cụm xanh lá/vàng nằm ở confidence 95–98% là các luật **web front-end** (`{html, react} ⇒ css`, `{git, html} ⇒ css`...). Một vài chấm vàng ở confidence 50–60% là các luật lift cao nhưng vế phải dài (ví dụ `{html, javascript} ⇒ {css, git}`).
-5. **Hàng chấm ở confidence = 100%** gồm 5 luật Spring/FastAPI/Scrum, support 3–4,8%. Chúng có màu **xanh dương (lift ≈ 4,8)**, chưa phải mức gắn kết cao nhất. Biểu đồ cho thấy luật "chắc chắn tuyệt đối" và luật "gắn kết bất ngờ" là hai nhóm gần như khác nhau.
-
-**Kết luận từ hình.** Không có luật nào vượt trội ở cả ba thước đo cùng lúc. Luật mạnh thường **chuyên biệt** (support thấp, lift cao), còn luật phổ biến thì **vừa phải** (support cao, lift 2–4). Vì vậy không nên chỉ xếp hạng theo một thước đo.
-
-**Lưu ý khi đọc.** Trong dải support 3–6% các chấm chồng lên nhau rất nhiều (độ trong suốt 0,8), nên mắt thường đánh giá thấp số luật ở đó; dùng số đếm ở trên thay vì ước lượng bằng mắt.
+**Kết luận:** luật mạnh thường chuyên biệt (support thấp, lift cao), còn luật phổ biến thì gắn kết vừa phải. Không có luật nào nổi trội ở cả ba thước đo, nên cần xem đồng thời support, confidence và lift.
 
 ### 5.2. Biểu đồ 2: Heatmap Lift của 15 kỹ năng phổ biến nhất
 
 ![Heatmap lift giữa các cặp trong 15 kỹ năng phổ biến nhất](output/heatmap_lift.png)
 
-*Hình 2. Mỗi ô là lift của luật một kỹ năng `A ⇒ B` (hàng a là vế trái, cột c là vế phải) trong bộ luật **thô**. Ô trống: cặp không có luật (không đạt support 3%) và đường chéo.*
+*Hình 2. Lift của luật một kỹ năng trong bộ luật thô (nên có cả ô dưới 1). Ô trống là cặp không đạt support 3%.*
 
-**Cách đọc.** Ô càng đỏ đậm thì hai kỹ năng càng gắn kết. Ô vàng nhạt gần 1 nghĩa là chỉ đi cùng nhau do ngẫu nhiên. Vì heatmap vẽ từ luật thô nên có cả ô lift **dưới 1**. Lift đối xứng nên ma trận đối xứng qua đường chéo, chỉ cần đọc một nửa.
+**Nhận xét**
 
-**Quan sát và ý nghĩa**
+- **Nhóm DevOps/Cloud tạo thành một khối đỏ rõ nhất.** Giữa `docker`, `kubernetes`, `devops`, `ci/cd`, `aws`, `azure`, `microservices`, `postgresql`, lift phần lớn từ 1,9 đến 3,3. Đậm nhất là `docker ⇄ kubernetes` (3,33), `aws ⇄ azure` (3,22), `kubernetes ⇄ devops` (2,85) và `microservices ⇄ rest api` (2,68).
+- **AWS và Azure có lift 3,2 dù là hai nền tảng cạnh tranh.** Có thể nhiều tin liệt kê nhiều nền tảng cloud cùng lúc, không nhất thiết đòi biết cả hai.
+- **SQL gần như không kéo theo kỹ năng nào.** Lift của SQL chỉ từ 0,6 đến 1,4, và dưới 1 với `linux` (0,6, thấp nhất bảng), `devops` và `kubernetes` (0,8), `aws`, `ci/cd`, `docker` (0,9). Giá trị cao nhất là `postgresql` (1,4), điều dễ hiểu vì cùng thuộc nhóm cơ sở dữ liệu.
+- **Python cũng tương tự:** lift với `agile` 0,7, `microservices` 0,8, `rest api` 0,9, còn với `java` và `postgresql` khoảng 1,0. Python và SQL là hai kỹ năng phổ biến nhất nhưng xuất hiện ở mọi loại việc, nên không đặc trưng cho cụm nào.
+- **Có hai hướng tách biệt:** nhóm hạ tầng/vận hành (khối đỏ) và nhóm lập trình/dữ liệu nền (Python, SQL, màu nhạt). Phù hợp với luật `sql ⇒ devops` có lift 0,83.
+- **Một số ô trống:** `linux` không có luật với `agile`, `java`, `microservices`, nghĩa là các tổ hợp này không đạt 3% giỏ. Linux nghiêng về mảng vận hành hơn mảng phát triển ứng dụng.
+- **Hạn chế:** chỉ có 15 kỹ năng nên không thấy cụm front-end và Java/Spring (đã nằm ở Hình 1 và bảng 4.3). `scrum ⇄ agile` cũng không có vì Scrum rớt khỏi top 15 sau khi loại 103 tin chưa xác nhận.
 
-1. **Một khối đỏ rõ ràng ở nhóm DevOps/Cloud.** Giữa `docker, kubernetes, devops, ci/cd, aws, azure, microservices, postgresql`, lift phần lớn nằm trong khoảng **1,9 đến 3,3**:
-
-   | Cặp | Lift |
-   |---|:-:|
-   | docker ⇄ kubernetes | **3,33** (ô đậm nhất) |
-   | aws ⇄ azure | 3,22 |
-   | kubernetes ⇄ devops | 2,85 |
-   | microservices ⇄ rest api | 2,68 |
-   | kubernetes ⇄ microservices | 2,6 |
-   | ci/cd ⇄ devops, docker ⇄ postgresql, java ⇄ microservices, git ⇄ rest api | cùng khoảng 2,5 |
-
-   Điểm đáng chú ý: **AWS ⇄ Azure** có lift 3,2 dù là hai nền tảng cạnh tranh nhau. Có thể nhà tuyển dụng liệt kê nhiều nền tảng cloud trong cùng một tin (kiểu "một trong các nền tảng"), chứ không nhất thiết đòi biết cả hai.
-2. **Hàng và cột `sql` gần như "lạnh".** Lift của SQL với các kỹ năng khác chỉ **0,6 đến 1,4**, và có nhiều ô dưới 1: `linux` (**0,6**, thấp nhất toàn bảng), `devops` (0,8), `kubernetes` (0,8), `aws`, `ci/cd`, `docker` (0,9). Giá trị cao nhất của hàng này chỉ là `postgresql` (1,4), điều dễ hiểu vì cả hai thuộc về cơ sở dữ liệu.
-3. **`python` cũng "lạnh" tương tự:** lift với `agile` 0,7, `microservices` 0,8, `rest api` 0,9, còn với `java` và `postgresql` khoảng 1,0. Kết hợp với điểm 2, ta thấy **Python và SQL phổ biến nhất (36,8% và 32,2%) nhưng gần như không kéo theo kỹ năng nào**. Chúng xuất hiện rộng khắp mọi loại việc, nên không đặc trưng cho cụm nào.
-4. **Hai "đường ray" tách biệt:** nhóm hạ tầng/vận hành (khối đỏ) và nhóm dữ liệu/lập trình nền (Python, SQL, màu nhạt). Dữ liệu gợi ý rằng tin tuyển dụng DevOps ít khi yêu cầu SQL hơn mức ngẫu nhiên (`sql ⇒ devops` lift 0,83), nhưng đây chỉ là mô tả cách JD liệt kê kỹ năng, không phải kết luận về năng lực.
-5. **Ô trống có ý nghĩa:** `linux` không có luật với `agile`, `java`, `microservices`, nghĩa là các tổ hợp này không đạt 3% giỏ. Điều này nhất quán với việc Linux thiên về mảng vận hành hơn mảng phát triển ứng dụng.
-
-**Hạn chế của hình.** Heatmap chỉ có 15 kỹ năng phổ biến nhất nên **không thấy cụm front-end** (`html`, `css`) **hay Java/Spring** (`spring` không nằm trong 15 kỹ năng). Hai cụm đó đã được thể hiện ở Hình 1 và bảng 4.3. Cặp `scrum ⇄ agile` cũng không có trên heatmap vì Scrum rớt khỏi top 15 sau khi loại 103 tin chưa xác nhận.
-
-**Kết luận từ hình.** Heatmap trả lời câu hỏi mà người học thường hỏi: *"học thêm kỹ năng nào sẽ ăn khớp với kỹ năng đang có?"*. Với Docker, hướng đi ăn khớp nhất là Kubernetes (3,33), DevOps/CI-CD (2,4) và PostgreSQL (2,5); với AWS là Azure (3,2) và Kubernetes (2,3). Đây là gợi ý dựa trên cách nhà tuyển dụng liệt kê kỹ năng, cần kiểm chứng thêm trước khi dùng làm lộ trình học.
+**Kết luận:** cụm DevOps/Cloud là nơi các kỹ năng gắn kết chặt nhất, còn Python và SQL là kỹ năng nền ít đi kèm kỹ năng khác. Ví dụ, tin có Docker thường kèm Kubernetes (3,33), PostgreSQL (2,5) và CI/CD (2,4). Đây là mô tả cách nhà tuyển dụng liệt kê kỹ năng, chưa đủ để làm lộ trình học nếu không kiểm chứng thêm.
 
 Hai biểu đồ và ba file CSV (`frequent_itemsets.csv`, `association_rules_filtered.csv`, `association_rules_nonredundant.csv`) được lưu trong thư mục `output/`.
 
