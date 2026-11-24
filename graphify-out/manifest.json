@@ -1,0 +1,422 @@
+{
+  "buoc 2.5_Portable/output_salary_scope/experiment_config.json": {
+    "mtime": 1795395649.4630902,
+    "seen": 1795503034.009026,
+    "ast_hash": "af2c4c979fa2d5e8d67256082ba5c1e6",
+    "semantic_hash": "af2c4c979fa2d5e8d67256082ba5c1e6"
+  },
+  "crawler/base.py": {
+    "mtime": 1794911862.5393016,
+    "seen": 1795503034.00903,
+    "ast_hash": "5fd55b9d2d972fde22c2fc07c2f537ce",
+    "semantic_hash": "5fd55b9d2d972fde22c2fc07c2f537ce"
+  },
+  "crawler/browser.py": {
+    "mtime": 1794540407.8957212,
+    "seen": 1795503034.0090322,
+    "ast_hash": "36ff1a4118ef47bc67a39e5bdbf0e93c",
+    "semantic_hash": "36ff1a4118ef47bc67a39e5bdbf0e93c"
+  },
+  "crawler/fetch_detail.py": {
+    "mtime": 1795051384.8243973,
+    "seen": 1795503034.009033,
+    "ast_hash": "a3bdb5b68a439e758f17f91acecddf93",
+    "semantic_hash": "a3bdb5b68a439e758f17f91acecddf93"
+  },
+  "crawler/itviec.py": {
+    "mtime": 1795138498.6372359,
+    "seen": 1795503034.009034,
+    "ast_hash": "2b3b2a51b9ae647ccf7bcc388b44b278",
+    "semantic_hash": "2b3b2a51b9ae647ccf7bcc388b44b278"
+  },
+  "crawler/linkedin.py": {
+    "mtime": 1795051666.6912794,
+    "seen": 1795503034.0090346,
+    "ast_hash": "79d271803d8c9b5027db7ba108f560c5",
+    "semantic_hash": "79d271803d8c9b5027db7ba108f560c5"
+  },
+  "crawler/topcv.py": {
+    "mtime": 1794879063.6604004,
+    "seen": 1795503034.0090356,
+    "ast_hash": "f8228a8c08c54bb40901f126656b2eef",
+    "semantic_hash": "f8228a8c08c54bb40901f126656b2eef"
+  },
+  "crawler/topdev.py": {
+    "mtime": 1794894994.3353117,
+    "seen": 1795503034.0090363,
+    "ast_hash": "46aac72c59da7c09a7a9a9de5a361068",
+    "semantic_hash": "46aac72c59da7c09a7a9a9de5a361068"
+  },
+  "crawler/vietnamnetworks.py": {
+    "mtime": 1794894994.506039,
+    "seen": 1795503034.0090368,
+    "ast_hash": "73fbbd5fe1b45a0dc0f79198363f95f1",
+    "semantic_hash": "73fbbd5fe1b45a0dc0f79198363f95f1"
+  },
+  "data/skill_dictionary.json": {
+    "mtime": 1795022706.470088,
+    "seen": 1795503034.0090375,
+    "ast_hash": "f8c11ed63bce970f20848e4ce4413c06",
+    "semantic_hash": "f8c11ed63bce970f20848e4ce4413c06"
+  },
+  "pipline/clean_salary.py": {
+    "mtime": 1795055155.7318652,
+    "seen": 1795503034.009038,
+    "ast_hash": "b18465cc81863d25a67efeb74f57b4ab",
+    "semantic_hash": "b18465cc81863d25a67efeb74f57b4ab"
+  },
+  "pipline/duplicate.py": {
+    "mtime": 1795138553.1487288,
+    "seen": 1795503034.0090392,
+    "ast_hash": "042f941d4f57153facc398e1e961f034",
+    "semantic_hash": "042f941d4f57153facc398e1e961f034"
+  },
+  "pipline/export_data.py": {
+    "mtime": 1795063004.8810298,
+    "seen": 1795503034.0090399,
+    "ast_hash": "f1fc69e9db2188780b995d2fdcbc7aaa",
+    "semantic_hash": "f1fc69e9db2188780b995d2fdcbc7aaa"
+  },
+  "pipline/extract_tech_skill_.py": {
+    "mtime": 1795022716.474326,
+    "seen": 1795503034.0090404,
+    "ast_hash": "2a05993c702ce58cd7f2c7327e854304",
+    "semantic_hash": "2a05993c702ce58cd7f2c7327e854304"
+  },
+  "pipline/filter_it.py": {
+    "mtime": 1795051366.2386036,
+    "seen": 1795503034.0090408,
+    "ast_hash": "c08888f8584005b22e6692c064a4ba20",
+    "semantic_hash": "c08888f8584005b22e6692c064a4ba20"
+  },
+  "pipline/group_jobs.py": {
+    "mtime": 1795022811.4578676,
+    "seen": 1795503034.0090415,
+    "ast_hash": "91ab8abda6cca470cc90f5f80eff9dc2",
+    "semantic_hash": "91ab8abda6cca470cc90f5f80eff9dc2"
+  },
+  "pipline/lam_sach.py": {
+    "mtime": 1795062799.129253,
+    "seen": 1795503034.0090425,
+    "ast_hash": "26cac93926f6f1c15f59f9f28441cc50",
+    "semantic_hash": "26cac93926f6f1c15f59f9f28441cc50"
+  },
+  "BAO_CAO_DU_LIEU.md": {
+    "mtime": 1795396158.835472,
+    "seen": 1795503034.0090432,
+    "ast_hash": "334c9ad0ad882ca3c587da84400de919",
+    "semantic_hash": "334c9ad0ad882ca3c587da84400de919"
+  },
+  "CLAUDE.md": {
+    "mtime": 1795502540.9691923,
+    "seen": 1795503034.0090437,
+    "ast_hash": "a4e44e2d6371cc74972b45e9e806c2db",
+    "semantic_hash": "a4e44e2d6371cc74972b45e9e806c2db"
+  },
+  "DATA_DICTIONARY.md": {
+    "mtime": 1795395911.6348166,
+    "seen": 1795503034.0090444,
+    "ast_hash": "7c044081273ea171fc9d6fc217d0390a",
+    "semantic_hash": "7c044081273ea171fc9d6fc217d0390a"
+  },
+  "GIAI_TRINH_KEY.md": {
+    "mtime": 1795480840.0793798,
+    "seen": 1795503034.009045,
+    "ast_hash": "1f160565012719ce569758371c5c168c",
+    "semantic_hash": "1f160565012719ce569758371c5c168c"
+  },
+  "README.md": {
+    "mtime": 1795086776.954309,
+    "seen": 1795503034.0090458,
+    "ast_hash": "4f45d7c0963d6efdaa14b10cfa6799ca",
+    "semantic_hash": "4f45d7c0963d6efdaa14b10cfa6799ca"
+  },
+  "buoc 2.3/.agents/skills/socratic-tutor/SKILL.md": {
+    "mtime": 1795157751.08066,
+    "seen": 1795503034.0090466,
+    "ast_hash": "498fb6b82e30390fac0a77a996606687",
+    "semantic_hash": "498fb6b82e30390fac0a77a996606687"
+  },
+  "buoc 2.3/miniNote_buoc2.3_GomCum.md": {
+    "mtime": 1795185668.791348,
+    "seen": 1795503034.0090473,
+    "ast_hash": "90130fdb76860c86cdb7e9a1a20316ae",
+    "semantic_hash": "90130fdb76860c86cdb7e9a1a20316ae"
+  },
+  "buoc 2.5_Portable/HUONG_DAN_CHAY_CHUNG.txt": {
+    "mtime": 1795395649.4256516,
+    "seen": 1795503034.009048,
+    "ast_hash": "2cd5bfd2b8815a28608175a30f9984b4",
+    "semantic_hash": "2cd5bfd2b8815a28608175a30f9984b4"
+  },
+  "buoc 2.5_Portable/MiniNote_2.5.md": {
+    "mtime": 1795440017.7491,
+    "seen": 1795503034.0090485,
+    "ast_hash": "035ae04ebdfb349b6cf85f799d20adb9",
+    "semantic_hash": "035ae04ebdfb349b6cf85f799d20adb9"
+  },
+  "buoc 2.5_Portable/output_salary_scope/MiniNote_salary_final.txt": {
+    "mtime": 1795395649.4339175,
+    "seen": 1795503034.0090494,
+    "ast_hash": "5abe927302c1aa2f6707c9b3bb898412",
+    "semantic_hash": "5abe927302c1aa2f6707c9b3bb898412"
+  },
+  "buoc 2.5_Portable/output_salary_scope/requirements.txt": {
+    "mtime": 1795353836.6910982,
+    "seen": 1795503034.0090501,
+    "ast_hash": "b9b889c86f56985074600d20f6481734",
+    "semantic_hash": "b9b889c86f56985074600d20f6481734"
+  },
+  "buoc 2.5_Portable/requirements.txt": {
+    "mtime": 1795353836.6910982,
+    "seen": 1795503034.0090506,
+    "ast_hash": "b9b889c86f56985074600d20f6481734",
+    "semantic_hash": "b9b889c86f56985074600d20f6481734"
+  },
+  "buoc2.1_2.2/miniNote_buoc2.1_Cleaning.md": {
+    "mtime": 1795443782.397634,
+    "seen": 1795503034.0090513,
+    "ast_hash": "2c2847f81fecd667ba695f5b3e04b4fc",
+    "semantic_hash": "2c2847f81fecd667ba695f5b3e04b4fc"
+  },
+  "buoc2.1_2.2/miniNote_buoc2.2_EDA.md": {
+    "mtime": 1795334907.1116269,
+    "seen": 1795503034.0090518,
+    "ast_hash": "fd78b192b8b1e4e769721491d5ace963",
+    "semantic_hash": "fd78b192b8b1e4e769721491d5ace963"
+  },
+  "buoc2.4/bao_cao_buoc_2.4.md": {
+    "mtime": 1795441955.3408654,
+    "seen": 1795503034.0090528,
+    "ast_hash": "d7862ee09826093680318dd11bdf13e0",
+    "semantic_hash": "d7862ee09826093680318dd11bdf13e0"
+  },
+  "crawler/CRAWLER_DOCS.md": {
+    "mtime": 1795217703.432162,
+    "seen": 1795503034.0090535,
+    "ast_hash": "13d20964f0319625c873f9ac1a1af7a5",
+    "semantic_hash": "13d20964f0319625c873f9ac1a1af7a5"
+  },
+  "file b\u00e1o c\u00e1o b\u00e0i nh\u00f3m/Nhom04_BaoCao_BaiTapLon.md": {
+    "mtime": 1795495763.9237814,
+    "seen": 1795503034.0090544,
+    "ast_hash": "c4d5c3347dc57b74865600300ce92e1b",
+    "semantic_hash": "c4d5c3347dc57b74865600300ce92e1b"
+  },
+  "pipline/PIPELINE_DOCS.md": {
+    "mtime": 1795141032.9357889,
+    "seen": 1795503034.009055,
+    "ast_hash": "a5be0c8d083c0fcee985ddf6b963c49f",
+    "semantic_hash": "a5be0c8d083c0fcee985ddf6b963c49f"
+  },
+  "slide thuyet trinh/Nhom04_YTuongSlide_Duc.md": {
+    "mtime": 1795496352.896721,
+    "seen": 1795503034.0090559,
+    "ast_hash": "5dd5cfa0c844490a1d6588742f1fcc91",
+    "semantic_hash": "5dd5cfa0c844490a1d6588742f1fcc91"
+  },
+  "slide thuyet trinh/noiDungSlide_buoc2.1_va2.2.md": {
+    "mtime": 1795496253.241966,
+    "seen": 1795503034.0090566,
+    "ast_hash": "304a409d0bf32c264ae6f97ca74324ef",
+    "semantic_hash": "304a409d0bf32c264ae6f97ca74324ef"
+  },
+  "slide thuyet trinh/noiDungSlide_buoc2.5_Chuong5.md": {
+    "mtime": 1795496645.4318128,
+    "seen": 1795503034.009057,
+    "ast_hash": "5fcc42b5ee0393c08b5e3aa11ea159ee",
+    "semantic_hash": "5fcc42b5ee0393c08b5e3aa11ea159ee"
+  },
+  "slide thuyet trinh/slide_thuyet_trinh_buoc_2.4.md": {
+    "mtime": 1795502081.530127,
+    "seen": 1795503034.0090578,
+    "ast_hash": "7fcd800fc6f9fe178465081f1eab433c",
+    "semantic_hash": "7fcd800fc6f9fe178465081f1eab433c"
+  },
+  "BaiTapLon.pdf": {
+    "mtime": 1794727686.7075381,
+    "seen": 1795503034.0090582,
+    "ast_hash": "c2e3f15430fce42bb406b85f9838cd50",
+    "semantic_hash": "c2e3f15430fce42bb406b85f9838cd50"
+  },
+  "file b\u00e1o c\u00e1o b\u00e0i nh\u00f3m/Nhom04_BaoCao_BaiTapLon.pdf": {
+    "mtime": 1795495765.6922832,
+    "seen": 1795503034.0090594,
+    "ast_hash": "fbce8aa55fb46c5ab8446e86937aab9d",
+    "semantic_hash": "fbce8aa55fb46c5ab8446e86937aab9d"
+  },
+  "buoc 2.5_Portable/output_salary_scope/figures/confusion_counts.png": {
+    "mtime": 1795353836.6590095,
+    "seen": 1795503034.00906,
+    "ast_hash": "749adee7b309f6d74f50549d2cc277b8",
+    "semantic_hash": "749adee7b309f6d74f50549d2cc277b8"
+  },
+  "buoc 2.5_Portable/output_salary_scope/figures/confusion_normalized.png": {
+    "mtime": 1795353836.672444,
+    "seen": 1795503034.0090606,
+    "ast_hash": "4aaea5d5e688b8308549b20774261726",
+    "semantic_hash": "4aaea5d5e688b8308549b20774261726"
+  },
+  "buoc 2.5_Portable/output_salary_scope/figures/pruned_tree_top_levels.png": {
+    "mtime": 1795353836.6823633,
+    "seen": 1795503034.009062,
+    "ast_hash": "ba62b00c09b6d0b0bfbe44edc0576611",
+    "semantic_hash": "ba62b00c09b6d0b0bfbe44edc0576611"
+  },
+  "buoc 2.5_Portable/output_salary_scope/figures/pruning_curve.png": {
+    "mtime": 1795395649.467249,
+    "seen": 1795503034.009063,
+    "ast_hash": "b740b4160373242c4b77cd2b27de3427",
+    "semantic_hash": "b740b4160373242c4b77cd2b27de3427"
+  },
+  "buoc 2.5_Portable/output_salary_scope/figures/recall_by_class.png": {
+    "mtime": 1795353836.6870127,
+    "seen": 1795503034.0090635,
+    "ast_hash": "4eeda6fc6d12399ca183acb9a680a2c2",
+    "semantic_hash": "4eeda6fc6d12399ca183acb9a680a2c2"
+  },
+  "buoc2.4/output/heatmap_lift.png": {
+    "mtime": 1795353836.7360265,
+    "seen": 1795503034.0090642,
+    "ast_hash": "d1a599c7842d4c1afebc73e364b31be2",
+    "semantic_hash": "d1a599c7842d4c1afebc73e364b31be2"
+  },
+  "buoc2.4/output/scatter_support_confidence.png": {
+    "mtime": 1795440017.7782,
+    "seen": 1795503034.009065,
+    "ast_hash": "1deabca61dc1e7414a76a7ce0a49abd6",
+    "semantic_hash": "1deabca61dc1e7414a76a7ce0a49abd6"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_co_cau_nguon.png": {
+    "mtime": 1795417668.6496668,
+    "seen": 1795503034.0090654,
+    "ast_hash": "b56796a52445fc2a7973188333f94358",
+    "semantic_hash": "b56796a52445fc2a7973188333f94358"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_heatmap_cloud_devops.png": {
+    "mtime": 1795490150.4479227,
+    "seen": 1795503034.0090663,
+    "ast_hash": "810cee0a17aa43cdbeda56df8d8136c7",
+    "semantic_hash": "810cee0a17aa43cdbeda56df8d8136c7"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_heatmap_du_lieu_ai.png": {
+    "mtime": 1795490150.3895228,
+    "seen": 1795503034.009067,
+    "ast_hash": "7b0bf58c22e9c592b0294a433bacb649",
+    "semantic_hash": "7b0bf58c22e9c592b0294a433bacb649"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_heatmap_it_tong_quat.png": {
+    "mtime": 1795490150.229572,
+    "seen": 1795503034.0090675,
+    "ast_hash": "52d0b5c79fa459138c40690e7ee65c8d",
+    "semantic_hash": "52d0b5c79fa459138c40690e7ee65c8d"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_heatmap_phan_mem_web.png": {
+    "mtime": 1795490150.3129895,
+    "seen": 1795503034.0090683,
+    "ast_hash": "85e28509ce48caba70ea8786c7fcb193",
+    "semantic_hash": "85e28509ce48caba70ea8786c7fcb193"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_luong_theo_cap_bac.png": {
+    "mtime": 1795417668.6831024,
+    "seen": 1795503034.0090687,
+    "ast_hash": "18a17928d1a90a9887aa4d10ea4f902a",
+    "semantic_hash": "18a17928d1a90a9887aa4d10ea4f902a"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_so_sanh_vung.png": {
+    "mtime": 1795417668.7006636,
+    "seen": 1795503034.0090697,
+    "ast_hash": "1548c1f00ea46bd3e2bc68c431a5febc",
+    "semantic_hash": "1548c1f00ea46bd3e2bc68c431a5febc"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.2_top15_ky_nang.png": {
+    "mtime": 1795417668.665816,
+    "seen": 1795503034.0090702,
+    "ast_hash": "15e7df87baf949c3dc8ae061109a2438",
+    "semantic_hash": "15e7df87baf949c3dc8ae061109a2438"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.3_elbow_silhouette.png": {
+    "mtime": 1795417668.7142365,
+    "seen": 1795503034.0090709,
+    "ast_hash": "689b7e6d647045e5de63c6023a0ba30a",
+    "semantic_hash": "689b7e6d647045e5de63c6023a0ba30a"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.3_kich_thuoc_cum.png": {
+    "mtime": 1795417668.72731,
+    "seen": 1795503034.0090716,
+    "ast_hash": "8bb616bc70eddb375459ea4988aae974",
+    "semantic_hash": "8bb616bc70eddb375459ea4988aae974"
+  },
+  "slide thuyet trinh/buoc 2.1 va 2.2/2.3_pca_2d.png": {
+    "mtime": 1795417668.7451167,
+    "seen": 1795503034.009072,
+    "ast_hash": "de56149c432c607e6b16a6e8f44fb3f2",
+    "semantic_hash": "de56149c432c607e6b16a6e8f44fb3f2"
+  },
+  "slide thuyet trinh/buoc 2.3/2.3_elbow_silhouette.png": {
+    "mtime": 1795496329.6649547,
+    "seen": 1795503034.0090728,
+    "ast_hash": "689b7e6d647045e5de63c6023a0ba30a",
+    "semantic_hash": "689b7e6d647045e5de63c6023a0ba30a"
+  },
+  "slide thuyet trinh/buoc 2.3/2.3_kich_thuoc_cum.png": {
+    "mtime": 1795496329.6649547,
+    "seen": 1795503034.0090735,
+    "ast_hash": "8bb616bc70eddb375459ea4988aae974",
+    "semantic_hash": "8bb616bc70eddb375459ea4988aae974"
+  },
+  "slide thuyet trinh/buoc 2.3/2.3_pca_2d.png": {
+    "mtime": 1795496329.6649547,
+    "seen": 1795503034.0090742,
+    "ast_hash": "de56149c432c607e6b16a6e8f44fb3f2",
+    "semantic_hash": "de56149c432c607e6b16a6e8f44fb3f2"
+  },
+  "slide thuyet trinh/buoc 2.4/heatmap_lift.png": {
+    "mtime": 1795353836.7360265,
+    "seen": 1795503034.0090747,
+    "ast_hash": "d1a599c7842d4c1afebc73e364b31be2",
+    "semantic_hash": "d1a599c7842d4c1afebc73e364b31be2"
+  },
+  "slide thuyet trinh/buoc 2.4/scatter_support_confidence.png": {
+    "mtime": 1795440017.7782,
+    "seen": 1795503034.0090754,
+    "ast_hash": "1deabca61dc1e7414a76a7ce0a49abd6",
+    "semantic_hash": "1deabca61dc1e7414a76a7ce0a49abd6"
+  },
+  "slide thuyet trinh/buoc 2.5/1795496660121_1142875591668223248_g2571233605694853986_53f72f7d6586a89db8db3772df705094.jpg": {
+    "mtime": 1795496774.5882707,
+    "seen": 1795503034.009076,
+    "ast_hash": "5ebdea251b0af20aa6961791bfbbc36d",
+    "semantic_hash": "5ebdea251b0af20aa6961791bfbbc36d"
+  },
+  "slide thuyet trinh/buoc 2.5/1795496660122_1142875591668223248_g2571233605694853986_c6cdb5285d880c2053935dfb299cc52f.jpg": {
+    "mtime": 1795496779.8116753,
+    "seen": 1795503034.0090768,
+    "ast_hash": "724d504037e241afcdd955bea1412a81",
+    "semantic_hash": "724d504037e241afcdd955bea1412a81"
+  },
+  "slide thuyet trinh/buoc 2.5/1795496660123_1142875591668223248_g2571233605694853986_ad7a1e82ddb8f5c28719f2d7554d0330.jpg": {
+    "mtime": 1795496782.4676137,
+    "seen": 1795503034.0090775,
+    "ast_hash": "6bff3352956a2a60d5942fbb1cb13b7f",
+    "semantic_hash": "6bff3352956a2a60d5942fbb1cb13b7f"
+  },
+  "slide thuyet trinh/ki\u1ec3u slide/Screenshot 2026-11-24 133659.png": {
+    "mtime": 1795502219.2001889,
+    "seen": 1795503034.0090785,
+    "ast_hash": "04e47fbe0609b0dbf5ba8d066db0fbd4",
+    "semantic_hash": "04e47fbe0609b0dbf5ba8d066db0fbd4"
+  },
+  "slide thuyet trinh/ki\u1ec3u slide/Screenshot 2026-11-24 133754.png": {
+    "mtime": 1795502274.3080664,
+    "seen": 1795503034.0090792,
+    "ast_hash": "fc5bcd0e8515625c1d6aa2020d282056",
+    "semantic_hash": "fc5bcd0e8515625c1d6aa2020d282056"
+  },
+  "slide thuyet trinh/ki\u1ec3u slide/Screenshot 2026-11-24 133808.png": {
+    "mtime": 1795502288.499195,
+    "seen": 1795503034.0090804,
+    "ast_hash": "db4a082a31305c2bf859ce68622ff7f3",
+    "semantic_hash": "db4a082a31305c2bf859ce68622ff7f3"
+  }
+}
