@@ -7,35 +7,26 @@
 
 ---
 
-## Mở đầu (Slide 1–2) · ~1 phút · *Đức*
+## Mở đầu (Slide 1–2) · ~30 giây · *Đức*
 
-Xin chào thầy Huỳnh Tấn Phát và các bạn. Chúng em là **nhóm 40**, môn Khai phá dữ liệu. Đề tài của nhóm là: *thị trường việc làm IT Việt Nam qua 3.204 tin tuyển dụng* – đi từ một crawler tự viết cho đến gom cụm, luật kết hợp và phân lớp khoảng lương.
-
-Cả bài được dẫn dắt bởi **năm câu hỏi nghiên cứu**:
-
-- **Q1:** Lương thay đổi thế nào theo cấp bậc và vùng?
-- **Q2:** Kỹ năng nào được yêu cầu nhiều nhất?
-- **Q3:** Thị trường chia thành những chân dung tuyển dụng nào?
-- **Q4:** Những kỹ năng nào hay đi cùng nhau?
-- **Q5:** Có dự đoán được khoảng lương từ kỹ năng và kinh nghiệm không?
-
-Nhóm đi theo một quy trình KDD duy nhất: thu thập, làm sạch, rồi lần lượt qua các bước 2.1 đến 2.5. Bốn thành viên mỗi người phụ trách một phần, và em xin bắt đầu với phần thu thập dữ liệu.
+Xin chào thầy Huỳnh Tấn Phát và các bạn. Chúng em là **nhóm 40**, đề tài *thị trường việc làm IT Việt Nam qua 3.204 tin tuyển dụng*. Nhóm trả lời năm câu hỏi: lương theo cấp bậc và vùng, kỹ năng được cần nhiều nhất, các nhóm kỹ năng trên thị trường, kỹ năng hay đi cùng nhau, và có đoán được khoảng lương không. Em bắt đầu với phần thu thập dữ liệu.
 
 ---
 
 ## Phần 1 · Thu thập và làm sạch dữ liệu (Slide 3–9) · ~2 phút · *Đức*
 
-**Kiến trúc (slide 4).** Nhóm tự viết **5 crawler** cho ITviec, TopDev, VietnamWorks, TopCV và LinkedIn, thu được **7.388 tin thô**. Điểm thiết kế quan trọng là *lọc IT trước, rồi mới mở trang chi tiết*: chỉ **3.216 trang** cần tải thay vì 7.388. Dữ liệu được cào ngày 17/11/2026, và mọi dòng đều có URL gốc cùng thời điểm cào để thầy có thể mở link đối chiếu.
+**Ý tưởng cào (slide 4–5).** Nhóm tự viết crawler cho **5 trang**: ITviec, TopDev, VietnamWorks, TopCV, LinkedIn. Cào **hai lượt**. Lượt một đọc trang danh sách, được **7.388 tin**. Lọc tin IT xong mới làm lượt hai, mở trang chi tiết lấy JD đầy đủ, nên chỉ mở **3.216 trang**. Mỗi dòng có `URL_Goc` và `Timestamp` để thầy mở link đối chiếu.
 
-**Năm nguồn, năm cách cào (slide 5).** Mỗi nguồn một cách: ITviec dùng Playwright; TopDev neo vào đường dẫn vì class Tailwind vô nghĩa; VietnamWorks gọi thẳng API JSON; TopCV bị Cloudflare chặn nên chạy bán tự động; LinkedIn cần đăng nhập nên dùng hồ sơ Chrome có sẵn cookie. Nhóm không dùng dịch vụ cào trả phí.
+**Khó khăn (slide 5–6).**
+- *Lượt một:* trang tải bằng JavaScript, nên dùng Playwright với Chrome thật. TopDev có class vô nghĩa, nên bám vào link tin. VietnamWorks thì gọi thẳng API JSON. TopCV bị Cloudflare chặn, LinkedIn bắt đăng nhập, nên người bấm trang, script tự đọc dữ liệu.
+- *Lượt hai:* gặp Cloudflare thì mở lại trình duyệt. Lương bị ẩn thì đọc `baseSalary` trong JSON-LD, nhưng chỉ **151/649 tin** ra số. Lượt này chạy hàng giờ, nên **20 tin lưu một lần**.
+- Giữa các trang luôn nghỉ **ngẫu nhiên** để không bị chặn.
 
-**Thách thức (slide 6).** Trang tải động, chống bot, lương bị ẩn. Với lương ẩn, nhóm đọc trường `baseSalary` trong JSON-LD: có 649 tin có trường này nhưng chỉ **151 tin** ra số thật. Chương trình lưu tiến độ mỗi 20 tin nên dừng giữa chừng không mất dữ liệu.
+**Pipeline (slide 7).** Khử trùng còn **7.291** → lọc IT bằng luật trên tiêu đề và tag, không dùng AI, còn **3.216** → lấy JD → trích kỹ năng, chuẩn hóa lương → xuất `raw_data.csv` và `clean_data.csv`: **3.204 tin**, gấp bốn lần mức 800 của đề. Gộp tin đăng ở nhiều trang còn **3.135 việc làm**.
 
-**Phễu dữ liệu (slide 7).** Từ 7.388 tin thô, khử trùng còn **7.291**, lọc phạm vi IT còn **3.216**, chốt còn **3.204** tin – vượt yêu cầu tối thiểu 800 tin của đề. Sau khi gộp các tin đăng trên nhiều nguồn còn **3.135 việc làm**. Việc lọc IT không dùng AI mà dùng luật trên tiêu đề và tag, ví dụ "IT Sales" là bán hàng nên bị loại.
+**Làm sạch (slide 8–9).** Lương quy về VND/tháng; "Thỏa thuận" để trống, không điền 0. Chỉ **767 tin** có đủ hai mức lương. TopCV không ghi kỳ trả nên coi là lương tháng, có cờ đánh dấu (**529 tin**). Kỹ năng trích bằng từ điển tự viết **161 mục**, tránh nhầm "test" trong "Contest".
 
-**Làm sạch (slide 8–9).** Lương được quy về VND/tháng với 1 USD = 25.000 đồng; không biết thì để trống chứ không điền 0. Chỉ **767 tin** có khoảng lương đóng đủ hai cận. Có một giả định duy nhất: TopCV không ghi kỳ trả nên được coi là lương tháng, gắn cờ cho **529 tin**. Địa điểm tập trung ở TP.HCM (1.569) và Hà Nội (1.391). Kỹ năng được trích bằng từ điển tự viết **161 mục**, tránh các bẫy như "test" nằm trong "Contest" hay React Native bị nhầm với React.
-
-Em xin chuyển sang bạn Tuấn.
+Em mời bạn Tuấn.
 
 ---
 
@@ -59,17 +50,22 @@ Tiếp theo là bước gom cụm, em xin nhường lại cho Đức.
 
 ---
 
-## Phần 3 · Bước 2.3: Gom cụm K-Means (Slide 23–28) · ~1,5 phút · *Đức*
+## Phần 3 · Bước 2.3: Gom cụm K-Means (Slide 23–28) · ~2 phút · *Đức*
 
-Câu hỏi Q3: tin tuyển dụng IT chia thành những nhóm kỹ năng nào? Nhóm biểu diễn mỗi tin là một vector 0/1 trên các kỹ năng. Sau khi giữ kỹ năng xuất hiện từ 10 tin và tin có từ 3 kỹ năng, ma trận cuối là **2.218 tin × 143 kỹ năng**, có chuẩn hóa L2 để cụm không chia theo việc tin ghi nhiều hay ít kỹ năng.
+**Dữ liệu (slide 24).** Mỗi tin là một dòng 0/1 theo kỹ năng. Giữ kỹ năng có ở ≥ 10 tin và tin có ≥ 3 kỹ năng: **2.218 tin × 143 kỹ năng**. Mỗi dòng chuẩn hóa **L2**, để tin ghi nhiều kỹ năng không bị tách riêng.
 
-**Chọn K.** Biểu đồ Elbow không có khuỷu rõ, Silhouette thấp hơn 0,1 ở mọi K vì Git, Docker, SQL có mặt ở mọi nhóm. Vì vậy nhóm đặt ba tiêu chí: cụm nhỏ nhất ≥ 5%, độ ổn định ARI ≥ 0,80, rồi mới đến Silhouette. Kết quả chọn **K = 8**: với K = 7 mất cụm Backend Java, còn K = 8 không mất hồ sơ nào.
+**Thuật toán.** **K-Means** xếp mỗi tin vào tâm gần nhất, dời tâm về trung bình cụm, lặp đến khi ổn định. Thử K từ 2 đến 12, đo **Elbow** (độ gọn), **Silhouette** (độ tách giữa các cụm) và **ARI** (chạy lại 5 hạt giống, kết quả có giống không).
 
-**Tám cụm:** Frontend và Web (363 tin), Dữ liệu doanh nghiệp (339), Backend Java (331), DevOps/Cloud (323), Data Science/ML/LLM (296), Hệ thống–mạng–bảo mật (211), Agile/Scrum (206), và C/C++ với Linux (149). Vì Python, SQL, Git có ở mọi cụm nên nhóm đặt tên bằng chỉ số *lift*, ví dụ Cisco có lift 9,0 trong cụm mạng.
+**Vì sao K = 8 (slide 25).**
+- Elbow **không có khuỷu**, Silhouette **dưới 0,1 ở mọi K**, vì Git, Docker, SQL có ở hầu hết nghề.
+- Quy tắc đặt trước: cụm nhỏ nhất ≥ 5%, ARI ≥ 0,80, rồi lấy Silhouette cao nhất. Còn K = 2, 3, 6, 7, 8; K = 8 cao nhất (**0,074**).
+- Nhưng K = 6–8 chỉ chênh 0,002–0,004. Lý do chính: **K = 8 là K nhỏ nhất giữ đủ 8 nhóm kỹ năng ở 20/20 lần chạy lại**. K = 7 mất Backend Java ở 19/20 lần. K = 9–12 có ARI dưới 0,80, chạy lại là đổi.
 
-**Độ tin cậy.** Tên cụm bền qua **20/20 lần** chạy lại, nhưng Silhouette chỉ **0,074** nên ranh giới mềm. Kết luận trung thực là: đây là *8 phân khúc kỹ năng chồng lấn*, không phải 8 nghề tách biệt.
+**Đặt tên (slide 26).** Python, SQL có ở mọi cụm, nên đặt tên bằng **lift**: tỷ lệ kỹ năng trong cụm chia tỷ lệ toàn mẫu. Tám cụm: Frontend/Web, Dữ liệu doanh nghiệp, Backend Java, DevOps/Cloud, Data Science/ML, Mạng–bảo mật, Agile/Scrum, C/C++ (từ **363** xuống **149** tin).
 
-Bây giờ mời bạn Thành.
+**Độ tin cậy (slide 27–28).** Tên cụm giữ nguyên **20/20** lần chạy lại, nhưng **13,8%** tin có Silhouette âm. Kết luận: **8 nhóm kỹ năng chồng lấn**, không phải 8 nghề tách biệt.
+
+Em mời bạn Thành.
 
 ---
 
